@@ -299,13 +299,12 @@ export type EventsWindowQueryVariables = Exact<{
 
 export type EventsWindowQuery = { eventsSearch: Array<{ season: number, code: string, name: string, type: EventType, start: string, end: string, started: boolean, ongoing: boolean, finished: boolean, hasMatches: boolean, remote: boolean, location: { city: string, state: string, country: string } }> };
 
-export type EventsSearchQueryVariables = Exact<{
+export type SeasonEventsQueryVariables = Exact<{
   season: number;
-  text: string;
 }>;
 
 
-export type EventsSearchQuery = { eventsSearch: Array<{ season: number, code: string, name: string, type: EventType, start: string, end: string, started: boolean, ongoing: boolean, finished: boolean, hasMatches: boolean, remote: boolean, location: { city: string, state: string, country: string } }> };
+export type SeasonEventsQuery = { eventsSearch: Array<{ season: number, code: string, name: string, type: EventType, start: string, end: string, started: boolean, ongoing: boolean, finished: boolean, hasMatches: boolean, remote: boolean, location: { city: string, state: string, country: string } }> };
 
 export type TeamSearchQueryVariables = Exact<{
   text: string;
@@ -743,9 +742,9 @@ export const EventsWindowDocument = new TypedDocumentString(`
     country
   }
 }`) as unknown as TypedDocumentString<EventsWindowQuery, EventsWindowQueryVariables>;
-export const EventsSearchDocument = new TypedDocumentString(`
-    query EventsSearch($season: Int!, $text: String!) {
-  eventsSearch(season: $season, type: Competition, searchText: $text, limit: 30) {
+export const SeasonEventsDocument = new TypedDocumentString(`
+    query SeasonEvents($season: Int!) {
+  eventsSearch(season: $season, type: Competition) {
     ...EventSummary
   }
 }
@@ -766,7 +765,7 @@ export const EventsSearchDocument = new TypedDocumentString(`
     state
     country
   }
-}`) as unknown as TypedDocumentString<EventsSearchQuery, EventsSearchQueryVariables>;
+}`) as unknown as TypedDocumentString<SeasonEventsQuery, SeasonEventsQueryVariables>;
 export const TeamSearchDocument = new TypedDocumentString(`
     query TeamSearch($text: String!) {
   teamsSearch(searchText: $text, limit: 8) {

@@ -173,9 +173,13 @@ export const EventsWindowQuery = graphql(`
 	}
 `);
 
-export const EventsSearchQuery = graphql(`
-	query EventsSearch($season: Int!, $text: String!) {
-		eventsSearch(season: $season, type: Competition, searchText: $text, limit: 30) {
+/**
+ * Every competition event of a season (~1.5k, ~40 KB gzipped), fetched once when the user searches.
+ * Filtered locally (src/lib/search/events.ts): FTC Scout's own `searchText` ignores location.
+ */
+export const SeasonEventsQuery = graphql(`
+	query SeasonEvents($season: Int!) {
+		eventsSearch(season: $season, type: Competition) {
 			...EventSummary
 		}
 	}
