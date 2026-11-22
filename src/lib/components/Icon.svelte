@@ -13,7 +13,8 @@
 		'arrow-up-right': 'M7 17 17 7M8 7h9v9',
 		swap: 'M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7',
 		pin: 'M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
-		play: 'M7 4v16l13-8z'
+		play: 'M7 4v16l13-8z',
+		settings: 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6'
 	} as const;
 	export type IconName = keyof typeof paths;
 </script>

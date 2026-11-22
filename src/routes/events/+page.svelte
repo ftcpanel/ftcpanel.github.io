@@ -36,9 +36,9 @@
 <svelte:window {onkeydown} />
 
 <div class="mx-auto max-w-screen-2xl px-4 pt-[max(1.25rem,env(safe-area-inset-top))] pb-6 lg:px-10 lg:pt-10">
-	<header class="relative mb-8 flex flex-col gap-5 text-white sm:flex-row sm:items-end sm:justify-between">
+	<header class="relative mb-8 flex flex-col gap-5 text-on-bg sm:flex-row sm:items-end sm:justify-between">
 		<div>
-			<p class="text-white/75">
+			<p class="text-on-bg/75">
 				{seasonInfo(CURRENT_SEASON).name} · {CURRENT_SEASON}–{(CURRENT_SEASON + 1) % 100}
 			</p>
 			<h1 class="mt-1 font-display text-5xl">Events</h1>
@@ -64,7 +64,7 @@
 
 	{#if debounced}
 		{#if search.isPending}
-			<p class="text-sm text-white/80">Searching…</p>
+			<p class="text-sm text-on-bg/80">Searching…</p>
 		{:else if search.isError}
 			<p class="text-sm text-red-al">{search.error.message}</p>
 		{:else}
@@ -72,7 +72,7 @@
 				{#each search.data?.eventsSearch ?? [] as event (event.code)}
 					<EventCard {event} />
 				{:else}
-					<p class="text-sm text-white/80">No events match “{debounced}”.</p>
+					<p class="text-sm text-on-bg/80">No events match “{debounced}”.</p>
 				{/each}
 			</div>
 		{/if}

@@ -96,7 +96,7 @@
 		{#each groups as g (g.label)}
 			<section>
 				<!-- Phones: on the page gradient. Desktop: inside the white matches panel. -->
-				<h3 class="mb-3 text-sm font-semibold text-white/85 lg:text-muted">{g.label}</h3>
+				<h3 class="mb-3 text-sm font-semibold text-on-bg/85 lg:text-muted">{g.label}</h3>
 				<div class="space-y-2.5">
 					{#each g.rows as m (m.id)}
 						<MatchCard
@@ -110,7 +110,7 @@
 					{/each}
 				</div>
 				{#if g.hidden}
-					<button type="button" class="mt-3 h-10 text-sm font-medium text-white lg:text-accent" onclick={() => (allUpcoming = true)}>
+					<button type="button" class="mt-3 h-10 text-sm font-medium text-on-bg lg:text-accent" onclick={() => (allUpcoming = true)}>
 						+ {g.hidden} more scheduled
 					</button>
 				{/if}

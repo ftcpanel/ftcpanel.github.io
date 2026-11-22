@@ -15,10 +15,10 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import EventCard from '#lib/components/EventCard.svelte';
 	import HeroChart from '#lib/components/HeroChart.svelte';
-	import Icon from '#lib/components/Icon.svelte';
 	import RankChart from '#lib/components/RankChart.svelte';
 	import ScopeRanks from '#lib/components/ScopeRanks.svelte';
-	import { dateRange, num, place, record } from '#lib/format.ts';
+	import TeamEventLive from '#lib/components/TeamEventLive.svelte';
+	import { num, place, record } from '#lib/format.ts';
 	import { glass } from '#lib/glass/layer.ts';
 	import { acquireLiveEvent, type LiveEvent } from '#lib/live/liveEvent.svelte.ts';
 	import { rankHistory } from '#lib/model/rankHistory.ts';
@@ -46,6 +46,14 @@
 	);
 	const played = $derived(events.filter((e) => e.stats && e.stats.played > 0));
 	const liveEvent = $derived(events.find((e) => e.event.ongoing));
+	/** Earlier events this season with results, to compare the live event against. */
+	const previous = $derived(
+		liveEvent
+			? played
+					.filter((e) => e.event.code !== liveEvent.event.code && e.event.start < liveEvent.event.start)
+					.map((e) => ({ name: e.event.name, start: e.event.start, stats: e.stats! }))
+			: []
+	);
 	const qs = $derived(t?.quickStats);
 	const tiles = $derived(
 		qs
@@ -89,8 +97,8 @@
 	</p>
 {:else}
 	<!-- Headline number + chart on the gradient -->
-	<section class="relative mt-8 text-white" aria-label="Team {number}">
-		<p class="text-white/80">
+	<section class="relative mt-8 text-on-bg" aria-label="Team {number}">
+		<p class="text-on-bg/80">
 			{t?.name ?? name ?? ''}{#if t}&nbsp;· {place(t.location)}{/if}
 		</p>
 		<div class="mt-1 flex flex-wrap items-end gap-x-4 gap-y-2">
@@ -103,7 +111,7 @@
 		</div>
 		{#if played.length >= 2}
 			<div class="mt-6">
-				<p class="mb-1 text-sm text-white/80">OPR by event</p>
+				<p class="mb-1 text-sm text-on-bg/80">OPR by event</p>
 				<HeroChart
 					values={played.map((e) => e.stats!.oprNp)}
 					labels={played.map((e) => shortDate(e.event.start))}
@@ -138,6 +146,10 @@
 			{/if}
 		</section>
 
+		{#if liveEvent}
+			<TeamEventLive team={number} event={liveEvent.event} feed={focusFeed} {previous} />
+		{/if}
+
 		{#if !team.isPending && t}
 			<ScopeRanks
 				team={t.number}
@@ -152,30 +164,8 @@
 			<RankChart event={eventRanks} eventName={focus?.event.name ?? null} season={seasonRanks} />
 		{/if}
 
-		{#if liveEvent}
-			<a
-				href="/events/{liveEvent.event.season}/{liveEvent.event.code}"
-				class="card group flex items-center gap-5 p-5 transition hover:-translate-y-0.5 sm:p-6"
-			>
-				<div class="min-w-0 flex-1">
-					<p class="eyebrow text-live">Competing now</p>
-					<p class="mt-1 truncate text-lg font-semibold">{liveEvent.event.name}</p>
-					<p class="text-sm text-muted">{dateRange(liveEvent.event.start, liveEvent.event.end)}</p>
-				</div>
-				{#if liveEvent.stats}
-					<div class="text-right">
-						<p class="eyebrow text-muted">Rank</p>
-						<p class="font-display text-4xl">{liveEvent.stats.rank}</p>
-					</div>
-				{/if}
-				<span class="grid size-11 shrink-0 place-items-center rounded-full bg-surface-2 transition group-hover:bg-ink group-hover:text-bg">
-					<Icon name="arrow-up-right" class="size-5" />
-				</span>
-			</a>
-		{/if}
-
 		<section class="pt-4">
-			<h2 class="mb-3 text-lg font-semibold tracking-tight text-white">This season's events</h2>
+			<h2 class="mb-3 text-lg font-semibold tracking-tight text-on-bg">This season's events</h2>
 			<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
 				{#each events as e (e.event.code)}
 					<EventCard event={e.event}>
@@ -187,7 +177,7 @@
 					</EventCard>
 				{:else}
 					{#if !team.isPending}
-						<p class="text-sm text-white/80">Not registered for any events yet.</p>
+						<p class="text-sm text-on-bg/80">Not registered for any events yet.</p>
 					{/if}
 				{/each}
 			</div>

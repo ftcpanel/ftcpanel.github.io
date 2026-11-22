@@ -78,31 +78,31 @@
 		<div class="relative w-full" style:height="{height}px">
 			<!-- Faint vertical grid at the ticks -->
 			{#each ticks as t (t.i)}
-				<span class="absolute inset-y-0 w-px bg-white/12" style:left="{t.x}%"></span>
+				<span class="absolute inset-y-0 w-px bg-on-bg/12" style:left="{t.x}%"></span>
 			{/each}
 
 			<svg viewBox="0 0 {W} {height}" preserveAspectRatio="none" class="absolute inset-0 size-full overflow-visible" aria-hidden="true">
 				<defs>
 					<linearGradient id="fill-{id}" x1="0" y1="0" x2="0" y2="1">
-						<stop offset="0%" stop-color="#fff" stop-opacity="0.32" />
-						<stop offset="100%" stop-color="#fff" stop-opacity="0" />
+						<stop offset="0%" style:stop-color="var(--hero-ink)" stop-opacity="0.32" />
+						<stop offset="100%" style:stop-color="var(--hero-ink)" stop-opacity="0" />
 					</linearGradient>
 				</defs>
 				<path d="{line} L{W},{height} L0,{height} Z" fill="url(#fill-{id})" />
-				<path d={line} fill="none" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round" />
-				<line x1={hi.x} x2={hi.x} y1={hi.y} y2={height} stroke="#fff" stroke-opacity="0.55" stroke-dasharray="3 4" vector-effect="non-scaling-stroke" />
+				<path d={line} fill="none" style:stroke="var(--hero-ink)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round" />
+				<line x1={hi.x} x2={hi.x} y1={hi.y} y2={height} style:stroke="var(--hero-ink)" stroke-opacity="0.55" stroke-dasharray="3 4" vector-effect="non-scaling-stroke" />
 			</svg>
 
 			<!-- Highlighted point -->
 			<span
-				class="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_0_5px_rgb(255_255_255/0.28),0_0_18px_4px_rgb(255_255_255/0.45)]"
+				class="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-hero-ink shadow-[0_0_0_5px_color-mix(in_srgb,var(--hero-ink)_28%,transparent),0_0_18px_4px_color-mix(in_srgb,var(--hero-ink)_45%,transparent)]"
 				style:left="{hi.x}%"
 				style:top="{hi.y}px"
 			></span>
 			{#if note}
 				<span
 					{@attach glass()}
-					class="glass absolute rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap text-white"
+					class="glass absolute rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap text-on-bg"
 					style:left="{hi.x}%"
 					style:top="{Math.max(0, hi.y - 40)}px"
 					style:translate="{pillShift} 0"
@@ -118,8 +118,8 @@
 				{#each ticks as t (t.i)}
 					{@const active = t.i === highlight}
 					{@const edge = t.x > 92 ? '-100%' : t.x < 8 ? '0%' : '-50%'}
-					<span class="absolute top-0 flex flex-col items-center gap-1 whitespace-nowrap {active ? 'font-semibold text-white' : 'text-white/60'}" style:left="{t.x}%" style:translate="{edge} 0">
-						<span class="size-1 rounded-full {active ? 'bg-white' : 'bg-transparent'}"></span>
+					<span class="absolute top-0 flex flex-col items-center gap-1 whitespace-nowrap {active ? 'font-semibold text-on-bg' : 'text-on-bg/60'}" style:left="{t.x}%" style:translate="{edge} 0">
+						<span class="size-1 rounded-full {active ? 'bg-on-bg' : 'bg-transparent'}"></span>
 						{t.text}
 					</span>
 				{/each}

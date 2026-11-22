@@ -31,7 +31,7 @@
 
 <div class="mx-auto max-w-6xl px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-8 lg:px-10 lg:pt-10">
 	<!-- Header on the gradient -->
-	<header class="flex items-center justify-between gap-3 text-white">
+	<header class="flex items-center justify-between gap-3 text-on-bg">
 		<a {@attach glass()} href="/" onclick={back} class="glass grid size-11 shrink-0 place-items-center rounded-full" aria-label="Back">
 			<Icon name="back" class="size-5" />
 		</a>

@@ -50,14 +50,14 @@
 	<p class="card p-5 text-sm text-red-al">Couldn't load events: {events.error.message}</p>
 {:else if compact}
 	<section>
-		<h2 class="mb-3 flex items-baseline gap-2 text-lg font-semibold tracking-tight text-white">
-			Live now <span class="text-sm font-normal text-white/70">{buckets.live.length}</span>
+		<h2 class="mb-3 flex items-baseline gap-2 text-lg font-semibold tracking-tight text-on-bg">
+			Live now <span class="text-sm font-normal text-on-bg/70">{buckets.live.length}</span>
 		</h2>
 		<div class="space-y-2.5">
 			{#each buckets.live as event (event.code)}
 				<EventCard {event} />
 			{:else}
-				<p class="text-sm text-white/80">{sections[0].empty}</p>
+				<p class="text-sm text-on-bg/80">{sections[0].empty}</p>
 			{/each}
 		</div>
 	</section>
@@ -72,8 +72,8 @@
 		{#each sections as s (s.key)}
 			<section class={tab === s.key ? '' : 'hidden xl:block'}>
 				<!-- Desktop columns start on the page gradient. -->
-				<h2 class="mb-3 hidden items-baseline gap-2 text-lg font-semibold tracking-tight text-white xl:flex">
-					{s.label} <span class="text-sm font-normal text-white/70">{buckets[s.key].length}</span>
+				<h2 class="mb-3 hidden items-baseline gap-2 text-lg font-semibold tracking-tight text-on-bg xl:flex">
+					{s.label} <span class="text-sm font-normal text-on-bg/70">{buckets[s.key].length}</span>
 				</h2>
 				<div class="space-y-2.5">
 					{#each buckets[s.key] as event (event.code)}

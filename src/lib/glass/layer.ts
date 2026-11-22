@@ -68,6 +68,10 @@ let capturedScroll = 0;
 /** How far (in screens) fixed glass may scroll from the last capture before content is recaptured. */
 const SCROLL_BAND = 0.5;
 const supported = typeof document !== 'undefined' && !!document.createElement('canvas').getContext('webgl');
+/** Liquid glass runs only in the glass theme (src/lib/stores/theme.svelte.ts). */
+let enabled = supported && document.documentElement.dataset.theme === 'glass';
+/** Every attached glass component, kept while glass is off so it can be switched on live. */
+const sources = new Map<HTMLElement, GlassOptions>();
 
 interface Zone {
 	left: number;
@@ -141,7 +145,6 @@ export function mountGlass(rootEl: HTMLElement, contentEl: HTMLElement): () => v
 	root = rootEl;
 	content = contentEl;
 	for (const e of entries.values()) if (!e.options.direct) root.appendChild(e.glass);
-	void import('#lib/vendor/liquidglass.js').then(({ setCapturePrune }) => setCapturePrune(prune));
 	// Page content changed (live data, tabs, navigation): re-rasterize, but only when the change can
 	// show through glass. Content below a change may shift, so the dirty area runs to the page end.
 	const observer = new MutationObserver((mutations) => {
@@ -174,16 +177,34 @@ export function mountGlass(rootEl: HTMLElement, contentEl: HTMLElement): () => v
 export function glass(options: GlassOptions = {}): Attachment<HTMLElement> {
 	return (src) => {
 		if (!supported) return;
-		const entry = options.direct ? directEntry(src, options) : mirrorEntry(src, options);
-		entries.set(src, entry);
-		startLoop();
-		schedule();
+		sources.set(src, options);
+		if (enabled) addEntry(src, options);
 		return () => {
-			entries.delete(src);
-			entry.stop();
-			schedule();
+			sources.delete(src);
+			entries.get(src)?.stop();
+			if (entries.delete(src)) schedule();
 		};
 	};
+}
+
+function addEntry(src: HTMLElement, options: GlassOptions) {
+	entries.set(src, options.direct ? directEntry(src, options) : mirrorEntry(src, options));
+	startLoop();
+	schedule();
+}
+
+/** Theme switch: tear down or bring up every glass component without a reload. */
+export function setGlassEnabled(on: boolean) {
+	on &&= supported;
+	if (on === enabled) return;
+	enabled = on;
+	if (on) {
+		for (const [src, options] of sources) addEntry(src, options);
+	} else {
+		for (const e of entries.values()) e.stop();
+		entries.clear();
+		schedule();
+	}
 }
 
 function directEntry(src: HTMLElement, options: GlassOptions): Entry {
@@ -249,7 +270,7 @@ async function rebuild() {
 	instance?.destroy();
 	instance = null;
 	for (const e of entries.values()) delete e.glass.dataset.liquid;
-	if (!root || !content || entries.size === 0) return;
+	if (!enabled || !root || !content || entries.size === 0) return;
 
 	position(true);
 	const live = [...entries.values()].filter((e) => e.glass.offsetWidth > 0 && e.glass.offsetHeight > 0);
@@ -258,7 +279,8 @@ async function rebuild() {
 		// Webfonts must be loaded before capture so text in the raster matches the live DOM.
 		await document.fonts.ready;
 		// Dynamic on purpose: ~26 KB gz of WebGL + html-to-image, only fetched where WebGL exists.
-		const { LiquidGlass } = await import('#lib/vendor/liquidglass.js');
+		const { LiquidGlass, setCapturePrune } = await import('#lib/vendor/liquidglass.js');
+		setCapturePrune(prune);
 		const next = await LiquidGlass.init({ root, glassElements: live.map((e) => e.glass) });
 		if (t !== token) return next.destroy();
 		instance = next;

@@ -111,10 +111,10 @@
 <svelte:head><title>Glass playground · FTCPanel</title></svelte:head>
 
 <div class="mx-auto max-w-screen-2xl px-4 pt-[max(1.25rem,env(safe-area-inset-top))] pb-8 lg:px-10 lg:pt-10" data-glass-ignore>
-	<header class="mb-6 text-white">
-		<p class="text-white/75">Liquid glass · @ybouane/liquidglass</p>
+	<header class="mb-6 text-on-bg">
+		<p class="text-on-bg/75">Liquid glass · @ybouane/liquidglass</p>
 		<h1 class="mt-1 font-display text-5xl">Glass playground</h1>
-		<p class="mt-2 max-w-2xl text-white/80">
+		<p class="mt-2 max-w-2xl text-on-bg/80">
 			The sidebar below uses the same WebGL glass as the site. Drag it over the content and tune it with the sliders.
 		</p>
 	</header>
@@ -122,7 +122,8 @@
 	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
 		<!-- Stage: its own glass root. Children = what the glass refracts + the rail. -->
 		<div bind:this={root} class="squircle relative h-[44rem] overflow-hidden rounded-[2.5rem] [@supports(corner-shape:squircle)]:rounded-[3.5rem]">
-			<div class="app-bg absolute inset-0"></div>
+			<!-- Always the glass theme's gradient: the stage previews glass in either theme. -->
+			<div class="absolute inset-0" style:background="var(--glass-page-bg)"></div>
 
 			<div class="absolute inset-0 p-8 pl-72 text-white">
 				<p class="text-white/75">Qualifier · Nov 21 – Nov 22</p>

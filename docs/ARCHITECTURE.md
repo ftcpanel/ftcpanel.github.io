@@ -228,6 +228,8 @@ FTC Scout OPR is shown next to model strengths, not replaced.
 
 ## 9. Phone and desktop UX
 
+Themes (Settings → Theme; `src/lib/stores/theme.svelte.ts`, `data-theme` on `<html>`, applied before first paint by `src/app.html`): **Simple** is the default: a flat page (white, or near-black in dark mode), outlined white cards, dark text, chips as outlined pills, no WebGL at all (the liquid-glass bundle is never fetched). **Glass** is the design described below. Text placed straight on the page uses the `on-bg` color token (ink in Simple, white in Glass) and the hero chart uses `hero-ink` (violet / white), so components are written once for both themes. Switching is live: `setGlassEnabled` in `layer.ts` tears down or rebuilds every glass component without a reload.
+
 Design language (`src/routes/layout.css`): soft and friendly. The whole site sits on one fixed gradient background (`app-bg`: a FIRST blue → violet → rose base with soft sky, blue, violet, rose and peach blobs layered over it). Page headers sit directly on it in white: title, one big headline number with its unit, frosted glass chips, and a `HeroChart` (white line + glow, faint grid, x-axis labels, the latest point marked with a drop line and a glass note pill). Everything else lives in white cards with continuous "squircle" corners (`corner-shape: squircle` where supported, plain rounded corners elsewhere). The desktop rail is a frosted glass panel. Colors come from the FIRST logo: blue and red are the alliance colors and appear wherever alliances do (match rows, win bars, the red-vs-blue win chip); violet, their blend, marks "you" highlights and links, never an alliance. Logo: friendly outlined robot head with one plain eye and one red/blue win-probability ring eye (`Logo.svelte`); the favicon (`src/lib/assets/favicon.svg`) is the same head redrawn to fill the square at 16 px, on no background.
 
 Liquid glass performance (`src/lib/glass/layer.ts` + patched `src/lib/vendor/liquidglass.js`): the library refracts an html-to-image raster of the page, and copying computed styles for every node of a long page is what made re-captures slow (seconds on a long event page). Re-captures now (1) run only when a DOM change can show through glass (the change, or content it shifts, overlaps a glass zone: a mirror's own area, or the column under fixed glass), (2) prune subtrees no glass can see (the element keeps its box, so layout is unchanged), (3) skip `display:none` subtrees, (4) rasterize at ≤1× and (5) clone in ~8 ms slices so taps stay responsive. Fixed glass (phone tab bar) has half a screen around the last capture in full detail; scrolling further triggers a recapture. Measured in headless Chromium on the KZASQ1 event page: 6.3 s → 0.12 s (desktop), 2.0 s → 0.5 s (phone).
@@ -262,7 +264,7 @@ Offline (Phase 6): installable PWA; last-known data with a "stale since hh:mm" b
 | `/predict` | Match predictor | Baseline + live delta |
 | `/rankings` | Leaderboards | Baseline |
 | `/accuracy` | Model accuracy | Baseline |
-| `/settings` | My team, watchlist, theme, data reset | Local |
+| `/settings` | Theme (Simple default / Glass, built) and my team (built); watchlist and data reset later | Local |
 
 ## 11. Repo layout
 

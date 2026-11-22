@@ -61,7 +61,7 @@
 		</p>
 	{:else if feed}
 		<!-- Header on the gradient -->
-		<section class="relative text-white" aria-label="Event overview">
+		<section class="relative text-on-bg" aria-label="Event overview">
 			<div class="flex items-center justify-between gap-3">
 				<a {@attach glass()} href="/events" class="glass grid size-11 place-items-center rounded-full" aria-label="Back to events">
 					<Icon name="back" class="size-5" />
@@ -76,14 +76,14 @@
 			{#if info}
 				<div class="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:items-end">
 					<div class="min-w-0">
-						<p class="text-white/75">{eventType(info.type)} · {dateRange(info.start, info.end)}</p>
+						<p class="text-on-bg/75">{eventType(info.type)} · {dateRange(info.start, info.end)}</p>
 						<h1 class="mt-1 font-display text-4xl leading-tight sm:text-5xl">{info.name}</h1>
-						<p class="mt-1 text-white/75">{info.venue ? `${info.venue} · ` : ''}{info.place}</p>
+						<p class="mt-1 text-on-bg/75">{info.venue ? `${info.venue} · ` : ''}{info.place}</p>
 
-						<p class="mt-8 text-white/80">Average alliance score</p>
+						<p class="mt-8 text-on-bg/80">Average alliance score</p>
 						<div class="flex flex-wrap items-end gap-x-4 gap-y-2">
 							<p class="font-display text-7xl leading-none">
-								{scores.length ? num(scores.reduce((a, b) => a + b, 0) / scores.length) : '–'}<span class="ml-2 text-xl text-white/75">pts</span>
+								{scores.length ? num(scores.reduce((a, b) => a + b, 0) / scores.length) : '–'}<span class="ml-2 text-xl text-on-bg/75">pts</span>
 							</p>
 							<div class="mb-2 flex flex-wrap gap-2 text-sm font-medium">
 								<span {@attach glass()} class="glass rounded-full px-3 py-1">High {scores.length ? Math.max(...scores) : '–'}</span>
@@ -91,7 +91,7 @@
 									<!-- Alliance accents: how often each side has won here. -->
 									<span {@attach glass()} class="glass flex items-center gap-2 rounded-full px-3 py-1" title="Matches won by each alliance">
 										<span class="size-2 rounded-full bg-red-al ring-2 ring-white/70"></span>{played.filter((m) => m.winner === 'red').length}
-										<span class="text-white/60">vs</span>
+										<span class="text-on-bg/60">vs</span>
 										<span class="size-2 rounded-full bg-blue-al ring-2 ring-white/70"></span>{played.filter((m) => m.winner === 'blue').length}
 									</span>
 								{/if}
@@ -103,7 +103,7 @@
 
 					<div class="min-w-0">
 						{#if trend.length >= 2}
-							<p class="mb-1 text-sm text-white/80">Scoring trend</p>
+							<p class="mb-1 text-sm text-on-bg/80">Scoring trend</p>
 							<HeroChart
 								values={trend}
 								labels={played.map((m) => m.label)}
@@ -123,9 +123,9 @@
 					</div>
 				</div>
 			{:else}
-				<div class="mt-8 h-10 w-2/3 animate-pulse rounded-full bg-white/20"></div>
-				<div class="mt-3 h-4 w-1/3 animate-pulse rounded-full bg-white/20"></div>
-				<div class="mt-10 h-20 w-1/2 animate-pulse rounded-3xl bg-white/15"></div>
+				<div class="mt-8 h-10 w-2/3 animate-pulse rounded-full bg-on-bg/15"></div>
+				<div class="mt-3 h-4 w-1/3 animate-pulse rounded-full bg-on-bg/15"></div>
+				<div class="mt-10 h-20 w-1/2 animate-pulse rounded-3xl bg-on-bg/10"></div>
 			{/if}
 		</section>
 

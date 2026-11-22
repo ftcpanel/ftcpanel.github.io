@@ -2,8 +2,9 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import Icon from '#lib/components/Icon.svelte';
+	import Segmented from '#lib/components/Segmented.svelte';
 	import { glass } from '#lib/glass/layer.ts';
-	import MatchupView from '#lib/components/MatchupView.svelte';
+	import MatchupView, { type MatchupMode } from '#lib/components/MatchupView.svelte';
 	import { acquireLiveEvent, type LiveEvent } from '#lib/live/liveEvent.svelte.ts';
 	import { fitEventModel, predictMatchup } from '#lib/model/matchup.ts';
 	import { isSupportedSeason, seasonInfo } from '#lib/seasons/index.ts';
@@ -63,9 +64,20 @@
 		}
 		return predictMatchup(model, alliances.red, alliances.blue);
 	});
-	const actual = $derived(
-		match?.played && match.red.score && match.blue.score ? { red: match.red.score, blue: match.blue.score } : null
-	);
+	const played = $derived(Boolean(match?.played && match.red.score && match.blue.score));
+
+	/** Played matches open on the result; `?view=prediction` shows the pre-match projection. */
+	const mode = $derived<MatchupMode>(played && page.url.searchParams.get('view') !== 'prediction' ? 'result' : 'prediction');
+	const modes: { value: MatchupMode; label: string }[] = [
+		{ value: 'result', label: 'Result' },
+		{ value: 'prediction', label: 'Pre-match prediction' }
+	];
+	function setMode(next: MatchupMode) {
+		const q = new URLSearchParams(page.url.search);
+		if (next === 'prediction') q.set('view', 'prediction');
+		else q.delete('view');
+		void goto(`?${q}`, { replace: true, reset: false });
+	}
 
 	function setTeams(red: number[], blue: number[]) {
 		const q = new URLSearchParams({ red: red.join(','), blue: blue.join(',') });
@@ -91,12 +103,17 @@
 					<Icon name="back" class="size-5" />
 				</a>
 				<div class="min-w-0">
-					<h1 class="font-display text-3xl leading-tight">Matchup{#if match}<span class="text-white/70"> · {match.label}</span>{/if}</h1>
-					<p class="truncate text-sm text-white/75">{feed?.info?.name ?? code}</p>
+					<h1 class="font-display text-3xl leading-tight">Matchup{#if match}<span class="text-on-bg/70"> · {match.label}</span>{/if}</h1>
+					<p class="truncate text-sm text-on-bg/75">{feed?.info?.name ?? code}</p>
 				</div>
 			</div>
 
-			{#if alliances}
+			{#if played}
+				<Segmented bind:value={() => mode, setMode} options={modes} class="mt-6 sm:max-w-sm" />
+			{/if}
+
+			<!-- The result shows its alliances in the hero; pickers are for exploring predictions. -->
+			{#if alliances && mode === 'prediction'}
 				<!-- Alliance pickers: native selects are the most usable control on phones. -->
 				<div class="mt-6 grid items-center gap-2 sm:grid-cols-[1fr_auto_1fr] sm:gap-3">
 					{#each ['red', 'blue'] as const as side, si (side)}
@@ -138,13 +155,13 @@
 		{/snippet}
 
 		{#if feed.status === 'loading' && !feed.info}
-			<section class="relative h-80 text-white">
+			<section class="relative h-80 text-on-bg">
 				{@render header()}
 			</section>
 		{:else if !alliances || !prediction || !feed.model.hasData}
-			<section class="relative pb-4 text-white">
+			<section class="relative pb-4 text-on-bg">
 				{@render header()}
-				<p class="mt-8 max-w-lg text-white/85">
+				<p class="mt-8 max-w-lg text-on-bg/85">
 					{#if !alliances}
 						Not enough teams registered to build a matchup yet.
 					{:else}
@@ -154,9 +171,9 @@
 				</p>
 			</section>
 		{:else}
-			<MatchupView prediction={prediction} season={info} {names} perspective={mine} {actual} {header} />
+			<MatchupView prediction={prediction} season={info} {names} perspective={mine} {match} bind:mode={() => mode, setMode} {header} />
 		{/if}
-		<p class="mt-6 px-2 text-xs text-white/75">
+		<p class="mt-6 px-2 text-xs text-on-bg/75">
 			{#if match && !match.played}Updates live as other matches are posted. {/if}Model: per-phase OPR fitted live on this
 			event's matches, blended with each team's earlier-event stats. Backtested on 645 qualification matches: 75% of
 			winners called correctly.
