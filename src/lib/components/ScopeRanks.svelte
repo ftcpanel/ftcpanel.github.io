@@ -98,7 +98,7 @@
 			{@const top = tile.value ? (tile.value.rank / tile.value.count) * 100 : null}
 			<div class="rounded-3xl bg-surface-2 p-4">
 				<p class="eyebrow text-muted">{tile.label}</p>
-				<p class="truncate text-xs text-muted" title={tile.sub}>{tile.sub}</p>
+				<p class="text-xs break-words text-muted">{tile.sub}</p>
 				{#if tile.value}
 					<p class="mt-2 font-display text-4xl leading-none">
 						#{tile.value.rank.toLocaleString()}<span class="text-base text-muted"> / {tile.value.count.toLocaleString()}</span>

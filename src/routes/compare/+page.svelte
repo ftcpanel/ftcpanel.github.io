@@ -98,14 +98,14 @@
 
 		<ul class="mt-5 flex flex-wrap items-center gap-2" aria-label="Compared teams">
 			{#each columns as c (c.number)}
-				<li class="chip flex h-11 max-w-full items-center rounded-full pr-0.5 pl-4 text-sm">
+				<li class="chip flex min-h-11 max-w-full items-center rounded-3xl py-0.5 pr-0.5 pl-4 text-sm">
 					<span class="mr-2 size-2.5 shrink-0 rounded-full" style:background={slotColor(c.slot)}></span>
 					<a href="/teams/{c.number}" class="flex min-w-0 items-baseline gap-1.5 hover:underline">
 						<span class="font-semibold">{c.number}</span>
 						{#if c.missing}
 							<span class="text-ink/75">not found</span>
 						{:else if c.name}
-							<span class="max-w-[9rem] truncate text-ink/75 sm:max-w-[14rem]">{c.name}</span>
+							<span class="min-w-0 text-ink/75 wrap-anywhere">{c.name}</span>
 						{/if}
 					</a>
 					<button
@@ -184,7 +184,7 @@
 										<span class="size-2 shrink-0 rounded-full" style:background={slotColor(t.slot)}></span>{t.number} best OPR
 									</p>
 									<p class="mt-1 font-display text-2xl leading-none">{num(t.bestEvent!.stats.oprNp)}</p>
-									<p class="mt-1 truncate text-xs text-muted" title={t.bestEvent!.name}>{t.bestEvent!.name}</p>
+									<p class="mt-1 line-clamp-2 text-xs text-muted wrap-anywhere" title={t.bestEvent!.name}>{t.bestEvent!.name}</p>
 								</div>
 							{/each}
 						</div>

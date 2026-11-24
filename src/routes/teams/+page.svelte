@@ -250,9 +250,9 @@
 	{#snippet head()}
 		<div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
 			<div class="min-w-0">
-				<h2 class="truncate text-lg font-semibold tracking-tight">{scopeName}</h2>
+				<h2 class="text-lg font-semibold tracking-tight break-words">{scopeName}</h2>
 				{#if scope === 'event' && ev}
-					<p class="truncate text-sm text-muted">{ev.code} · {dateRange(ev.start, ev.end)} · {place(ev.location)}</p>
+					<p class="text-sm break-words text-muted">{ev.code} · {dateRange(ev.start, ev.end)} · {place(ev.location)}</p>
 				{/if}
 			</div>
 			<div class="flex shrink-0 items-center justify-between gap-3">

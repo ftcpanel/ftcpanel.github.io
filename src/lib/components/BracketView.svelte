@@ -26,7 +26,27 @@
 			const n = Math.max(0, ...slots.map((s) => s.def.column)) + 1;
 			return Array.from({ length: n }, (_, c) => slots.filter((s) => s.def.column === c));
 		};
-		return { upper: cols('upper'), lower: cols('lower'), final: playoffs.slots.filter((s) => s.def.side === 'final') };
+		const final = playoffs.slots.filter((s) => s.def.side === 'final');
+		/** Consecutive slots sharing a round name, for the stacked phone layout. */
+		const rounds = (slots: BracketSlot[]) =>
+			slots.reduce<{ name: string; slots: BracketSlot[] }[]>((acc, s) => {
+				const last = acc.at(-1);
+				if (last?.name === s.def.round) last.slots.push(s);
+				else acc.push({ name: s.def.round, slots: [s] });
+				return acc;
+			}, []);
+		const upper = cols('upper');
+		const lower = cols('lower');
+		return {
+			upper,
+			lower,
+			final,
+			sections: [
+				{ label: 'Upper bracket', rounds: rounds(upper.flat()) },
+				{ label: 'Lower bracket', rounds: rounds(lower.flat()) },
+				{ label: 'Final', rounds: rounds(final) }
+			]
+		};
 	});
 
 	function href(slot: BracketSlot): string | undefined {
@@ -40,7 +60,7 @@
 
 {#snippet allianceLabel(a: Alliance)}
 	<span class="grid size-6 shrink-0 place-items-center rounded-full bg-surface-2 text-[11px] font-semibold">{a.seed || '–'}</span>
-	<span class="min-w-0 truncate text-sm">
+	<span class="min-w-0 text-sm sm:truncate">
 		<span class="font-semibold">{a.captain}</span>
 		{#each a.teams.slice(1) as t (t)}<span class="text-muted"> · {t}</span>{/each}
 	</span>
@@ -51,7 +71,7 @@
 	{@const lost = slot.winner !== null && !won}
 	{@const p = slot.pRed === null ? null : color === 'red' ? slot.pRed : 1 - slot.pRed}
 	<div
-		class="flex h-10 items-center gap-2 rounded-2xl px-2.5 {mine(side.alliance) ? 'bg-accent-soft' : ''} {side.projected ? 'outline-1 outline-line outline-dashed' : ''}"
+		class="flex min-h-10 items-center gap-2 rounded-2xl px-2.5 py-1 sm:h-10 sm:py-0 {mine(side.alliance) ? 'bg-accent-soft' : ''} {side.projected ? 'outline-1 outline-line outline-dashed' : ''}"
 	>
 		<span class="size-2 shrink-0 rounded-full {dot[color]}" aria-hidden="true"></span>
 		{#if side.alliance}
@@ -78,7 +98,8 @@
 	>
 		<p class="flex items-baseline justify-between px-2 pt-0.5 pb-1.5 text-[11px]">
 			<span class="font-semibold">M{slot.def.series}</span>
-			<span class="truncate text-muted">{slot.skipped ? 'Not needed' : slot.def.round}</span>
+			<!-- The stacked layout below md already heads each round. -->
+			<span class="truncate text-muted {slot.skipped ? '' : 'max-md:hidden'}">{slot.skipped ? 'Not needed' : slot.def.round}</span>
 		</p>
 		<div class="space-y-1">
 			{@render sideRow(slot, 'red', slot.red)}
@@ -128,8 +149,27 @@
 			{@render oddsList(playoffs.odds, playoffs.champion)}
 		</div>
 
-		<!-- Columns fill the width on desktop; phones scroll sideways through the rounds. -->
-		<div class="-mx-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5">
+		<!-- Phones and small tablets: sections stacked, each round's matches one under another. -->
+		<div class="space-y-5 md:hidden">
+			{#each layout.sections as section (section.label)}
+				<div>
+					<h3 class="mb-2 px-1 text-sm font-semibold">{section.label}</h3>
+					<div class="space-y-3">
+						{#each section.rounds as round (round.name)}
+							<div>
+								<p class="mb-1.5 px-2 text-xs font-semibold text-muted">{round.name}</p>
+								<div class="grid gap-3 sm:grid-cols-2">
+									{#each round.slots as slot (slot.def.series)}{@render slotCard(slot)}{/each}
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/each}
+		</div>
+
+		<!-- From md up: columns fill the width on desktop; narrower screens scroll sideways through the rounds. -->
+		<div class="-mx-4 hidden overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 md:block">
 			<div
 				class="grid gap-x-3 gap-y-5"
 				style:grid-template-columns="repeat({layout.upper.length + 1}, minmax(14rem, 1fr))"

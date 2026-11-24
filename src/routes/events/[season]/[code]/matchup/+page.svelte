@@ -103,7 +103,7 @@
 				</a>
 				<div class="min-w-0">
 					<h1 class="font-display text-3xl leading-tight">Matchup{#if match}<span class="text-ink/70"> · {match.label}</span>{/if}</h1>
-					<p class="truncate text-sm text-ink/75">{feed?.info?.name ?? code}</p>
+					<p class="text-sm text-ink/75 sm:truncate">{feed?.info?.name ?? code}</p>
 				</div>
 			</div>
 
@@ -128,7 +128,7 @@
 						{/if}
 						<fieldset class="chip rounded-[1.75rem] p-1.5">
 							<legend class="sr-only">{side === 'red' ? 'Red' : 'Blue'} alliance</legend>
-							<div class="grid grid-cols-2 gap-1.5">
+							<div class="grid gap-1.5 sm:grid-cols-2">
 								{#each alliances[side] as team, slot (slot)}
 									<label class="relative block min-w-0">
 										<span class="sr-only">{side} team {slot + 1}</span>

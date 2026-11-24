@@ -133,8 +133,8 @@
 
 	<!-- Phones: compact rows, tap for details -->
 	<ul class="card overflow-hidden p-2 md:hidden">
-		<li class="grid grid-cols-[2.5rem_minmax(0,1fr)_3.25rem_4rem] gap-2 px-3 pt-2 pb-1 text-xs font-medium text-muted">
-			<span>#</span><span>Team</span><span class="text-right">RS</span><span class="text-right">OPR</span>
+		<li class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] gap-x-2 px-3 pt-2 pb-1 text-xs font-medium text-muted">
+			<span>#</span><span>Team</span><span class="w-12 text-right">OPR</span>
 		</li>
 		{#each sorted as r (r.team)}
 			{@const open = expanded === r.team}
@@ -144,15 +144,14 @@
 					type="button"
 					aria-expanded={open}
 					onclick={() => (expanded = open ? null : r.team)}
-					class="grid min-h-16 w-full grid-cols-[2.5rem_minmax(0,1fr)_3.25rem_4rem] items-center gap-2 px-3 py-2.5 text-left"
+					class="grid min-h-16 w-full grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-2 px-3 py-2.5 text-left"
 				>
 					<span class="font-display text-xl {mine ? 'text-accent' : ''}">{r.stats?.rank ?? '–'}</span>
 					<span class="min-w-0">
-						<span class="block truncate"><span class="font-semibold">{r.team}</span> {r.name}</span>
-						<span class="block text-xs text-muted">{r.stats ? record(r.stats) : 'No matches yet'}</span>
+						<span class="line-clamp-2 wrap-anywhere"><span class="font-semibold">{r.team}</span> {r.name}</span>
+						<span class="block text-xs text-muted">{r.stats ? `${record(r.stats)} · RS ${num(r.stats.rs, 2)}` : 'No matches yet'}</span>
 					</span>
-					<span class="text-right text-sm">{num(r.stats?.rs, 2)}</span>
-					<span class="text-right">
+					<span class="w-12 shrink-0 text-right">
 						<span class="block text-sm font-semibold">{num(r.stats?.oprNp)}</span>
 						<span class="mt-1 ml-auto block h-1 w-12 overflow-hidden rounded-full bg-line">
 							<span class="block h-full rounded-full bg-accent" style:width="{Math.max(0, ((r.stats?.oprNp ?? 0) / maxOpr) * 100)}%"></span>
@@ -169,12 +168,12 @@
 							<div class="rounded-2xl bg-surface p-3"><dt class="text-xs text-muted">High</dt><dd class="mt-0.5 font-display text-lg">{num(r.stats.maxNp, 0)}</dd></div>
 							<div class="rounded-2xl bg-surface p-3"><dt class="text-xs text-muted">Played</dt><dd class="mt-0.5 font-display text-lg">{r.stats.played}</dd></div>
 							{#each season.rps as rp (rp.key)}
-								<div class="rounded-2xl bg-surface p-3"><dt class="truncate text-xs text-muted">{rp.label} RP</dt><dd class="mt-0.5 font-display text-lg">{pct(r.stats.rpRate[rp.key])}</dd></div>
+								<div class="rounded-2xl bg-surface p-3"><dt class="text-xs break-words text-muted">{rp.label} RP</dt><dd class="mt-0.5 font-display text-lg">{pct(r.stats.rpRate[rp.key])}</dd></div>
 							{/each}
 						</dl>
 					{/if}
 					<div class="flex items-center justify-between gap-3 px-3 pb-3">
-						<p class="min-w-0 truncate px-1 text-xs text-muted">{r.location}</p>
+						<p class="min-w-0 px-1 text-xs break-words text-muted">{r.location}</p>
 						<a href="/teams/{r.team}" class="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-medium text-accent">
 							Team page <Icon name="arrow" class="size-3.5" />
 						</a>

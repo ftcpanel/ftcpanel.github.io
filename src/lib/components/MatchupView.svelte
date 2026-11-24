@@ -193,7 +193,7 @@
 						<span class="size-2.5 shrink-0 rounded-full {dot[side]}" aria-hidden="true"></span>
 						<ul class="min-w-0 flex-1 space-y-0.5 text-sm" aria-label="{sideLabel[side]} alliance">
 							{#each match[side].teams as t (t.number)}
-								<li class="truncate">
+								<li class="wrap-anywhere">
 									<a href="/teams/{t.number}" class="hover:underline {t.noShow || t.dq ? 'line-through opacity-70' : ''}">
 										<span class="font-semibold">{t.number}</span>
 										<span class="text-ink/80">{names.get(t.number) ?? ''}</span>
@@ -552,7 +552,7 @@
 						<li class="flex items-center gap-3 rounded-2xl px-4 py-2.5 {x.team === perspective ? 'bg-accent-soft' : 'bg-surface-2'}">
 							<span class="size-2 shrink-0 rounded-full {dot[x.side]}"></span>
 							<span class="min-w-0 flex-1">
-								<a href="/teams/{x.team}" class="block truncate text-sm hover:text-accent hover:underline"><span class="font-semibold">{x.team}</span> {names.get(x.team) ?? ''}</a>
+								<a href="/teams/{x.team}" class="line-clamp-2 text-sm wrap-anywhere hover:text-accent hover:underline"><span class="font-semibold">{x.team}</span> {names.get(x.team) ?? ''}</a>
 								<span class="text-xs {x.source === 'field' ? 'text-warn' : 'text-muted'}">
 									{sourceLabel[x.source]}{x.matches ? ` · ${x.matches} matches` : ''}
 								</span>

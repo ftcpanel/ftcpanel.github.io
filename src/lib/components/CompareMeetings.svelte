@@ -79,7 +79,7 @@
 								>
 									<span class="w-16 shrink-0">
 										<span class="block font-display text-lg leading-6">{m.match.label}</span>
-										<span class="block truncate text-xs text-muted" title={eventNames.get(m.eventCode)}>{m.eventCode}</span>
+										<span class="block text-xs text-muted wrap-anywhere" title={eventNames.get(m.eventCode)}>{m.eventCode}</span>
 									</span>
 									<span class="min-w-0 flex-1 text-sm">
 										{#if together}

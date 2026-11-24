@@ -80,8 +80,8 @@
 						>
 							<span class="w-14 shrink-0 text-sm font-semibold">{team.number}</span>
 							<span class="min-w-0 flex-1">
-								<span class="block truncate font-medium">{team.name}</span>
-								<span class="block truncate text-xs text-muted">{place(team.location)}</span>
+								<span class="line-clamp-2 font-medium wrap-anywhere">{team.name}</span>
+								<span class="block text-xs break-words text-muted">{place(team.location)}</span>
 							</span>
 						</button>
 					</li>

@@ -75,8 +75,8 @@
 							class="flex min-h-12 w-full flex-col justify-center rounded-2xl px-3 py-2 text-left transition hover:bg-surface-2"
 							onclick={() => pick(event.code)}
 						>
-							<span class="block w-full truncate font-medium">{event.name}</span>
-							<span class="block w-full truncate text-xs text-muted">
+							<span class="line-clamp-2 w-full font-medium wrap-anywhere">{event.name}</span>
+							<span class="block w-full text-xs break-words text-muted">
 								{event.code} · {dateRange(event.start, event.end)} · {place(event.location)}
 							</span>
 						</button>

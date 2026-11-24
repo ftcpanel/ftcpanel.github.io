@@ -33,8 +33,8 @@
 			{#if event.ongoing}<LiveDot /><span class="font-medium text-live">Live</span> ·{/if}
 			{eventType(event.type)}
 		</p>
-		<p class="mt-0.5 truncate font-medium">{event.name}</p>
-		<p class="truncate text-sm text-muted">{event.remote ? 'Remote' : place(event.location)}</p>
+		<p class="mt-0.5 line-clamp-2 font-medium wrap-anywhere lg:line-clamp-1">{event.name}</p>
+		<p class="line-clamp-2 text-sm text-muted wrap-anywhere lg:line-clamp-1">{event.remote ? 'Remote' : place(event.location)}</p>
 		{@render children?.()}
 	</div>
 	<span class="grid size-9 shrink-0 place-items-center self-start rounded-full bg-surface-2 text-muted transition group-hover:bg-ink group-hover:text-bg">

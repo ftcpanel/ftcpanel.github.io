@@ -16,10 +16,10 @@
 {#snippet legend(list: CompareTeam[])}
 	<ul class="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs">
 		{#each list as t (t.number)}
-			<li class="flex items-center gap-1.5">
-				<span class="size-2.5 rounded-full" style:background={slotColor(t.slot)}></span>
+			<li class="flex min-w-0 items-center gap-1.5">
+				<span class="size-2.5 shrink-0 rounded-full" style:background={slotColor(t.slot)}></span>
 				<span class="font-semibold">{t.number}</span>
-				<span class="max-w-32 truncate text-muted">{t.name}</span>
+				<span class="min-w-0 text-muted wrap-anywhere">{t.name}</span>
 			</li>
 		{/each}
 	</ul>

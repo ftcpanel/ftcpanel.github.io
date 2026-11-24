@@ -83,8 +83,39 @@
 			<span class="size-1.5 rounded-full bg-accent"></span> Best in row · OPR is non-penalty
 		</p>
 	</div>
-	<!-- 3–4 teams scroll sideways on phones with the label column pinned. -->
-	<div class="overflow-x-auto">
+	<!-- Phones: stacked blocks, one stat per block with the teams side by side underneath. -->
+	<div class="sm:hidden" style:--n={columns.length}>
+		<div class="grid grid-cols-[repeat(var(--n),minmax(0,1fr))] gap-1.5">
+			{#each columns as c (c.number)}
+				<a href="/teams/{c.number}" class="chip flex min-w-0 items-center justify-center gap-1.5 rounded-full px-1.5 py-1.5 text-xs font-semibold" title={c.team?.name}>
+					<span class="size-2 shrink-0 rounded-full" style:background={slotColor(c.slot)}></span>
+					{c.number}
+				</a>
+			{/each}
+		</div>
+		{#each grid as row (row.label)}
+			<div class="mt-3 border-t border-line pt-2.5">
+				<p class="mb-1 text-xs font-medium text-muted">{row.label}</p>
+				<div class="grid grid-cols-[repeat(var(--n),minmax(0,1fr))] gap-1.5">
+					{#each row.cells as cell, i (columns[i].number)}
+						<div class="min-w-0 px-0.5">
+							{#if cell}
+								<span class="flex items-center gap-1 {cell.best ? 'font-semibold' : ''}">
+									<span class="min-w-0 font-display text-base leading-6 wrap-anywhere {cell.best ? 'font-medium' : ''}">{cell.main}</span>
+									{#if cell.best}<span class="size-1.5 shrink-0 rounded-full bg-accent" aria-label="best"></span>{/if}
+								</span>
+								{#if cell.sub}<span class="line-clamp-3 text-[11px] leading-tight break-words text-muted" title={cell.sub}>{cell.sub}</span>{/if}
+							{:else}
+								<span class="block h-6 w-full max-w-14 animate-pulse rounded-lg bg-surface-2"></span>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/each}
+	</div>
+	<!-- From sm up: a table; 3–4 teams scroll sideways on narrow screens with the label column pinned. -->
+	<div class="hidden overflow-x-auto sm:block">
 		<table class="w-full border-separate border-spacing-0 text-sm {columns.length > 2 ? 'min-w-[34rem]' : ''}">
 			<thead>
 				<tr>
@@ -113,7 +144,7 @@
 										<span class="font-display text-lg leading-6 sm:text-xl {cell.best ? 'font-medium' : ''}">{cell.main}</span>
 										{#if cell.best}<span class="size-1.5 shrink-0 rounded-full bg-accent" aria-label="best"></span>{/if}
 									</span>
-									{#if cell.sub}<span class="mt-0.5 line-clamp-2 block text-xs text-muted" title={cell.sub}>{cell.sub}</span>{/if}
+									{#if cell.sub}<span class="mt-0.5 line-clamp-2 text-xs text-muted" title={cell.sub}>{cell.sub}</span>{/if}
 								{:else}
 									<span class="block h-6 w-14 animate-pulse rounded-lg bg-surface-2"></span>
 								{/if}

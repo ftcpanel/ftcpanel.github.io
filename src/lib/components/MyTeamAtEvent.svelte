@@ -113,7 +113,7 @@
 				</p>
 				<p class="mt-3 flex items-center gap-2 text-sm">
 					<span class="rounded-full px-2 py-0.5 text-xs font-semibold {outcome === 'Win' ? 'bg-live/15 text-live' : outcome === 'Loss' ? 'bg-red-al/15 text-red-al' : 'bg-line text-muted'}">{outcome}</span>
-					<span class="truncate text-muted">with {others(last)}</span>
+					<span class="min-w-0 break-words text-muted">with {others(last)}</span>
 				</p>
 			{:else}
 				<p class="eyebrow text-muted">Last match</p>
@@ -149,10 +149,10 @@
 								{#if !x.m.played && x.m.scheduledAt}<span class="text-[11px] text-muted">{clock(x.m.scheduledAt)}</span>{/if}
 							</span>
 							<span class="min-w-0 flex-1 text-sm">
-								<span class="flex items-center gap-1.5 truncate">
+								<span class="flex items-center gap-1.5">
 									<span class="size-2 shrink-0 rounded-full {dot[x.side]}"></span>with <span class="font-medium">{others(x)}</span>
 								</span>
-								<span class="flex items-center gap-1.5 truncate text-muted">
+								<span class="flex items-center gap-1.5 text-muted">
 									<span class="size-2 shrink-0 rounded-full {dot[x.opp]}"></span>vs {x.m[x.opp].teams.map((t) => t.number).join(', ')}
 								</span>
 							</span>

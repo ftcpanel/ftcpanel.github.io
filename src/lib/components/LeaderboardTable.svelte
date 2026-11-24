@@ -130,24 +130,24 @@
 					>
 						<span class="font-display text-xl {mine ? 'text-accent' : ''}">{r.rank ?? '–'}</span>
 						<span class="min-w-0">
-							<span class="block truncate"><span class="font-semibold">{r.team}</span> {r.name}</span>
-							<span class="block truncate text-xs text-muted">{r.location}</span>
+							<span class="line-clamp-2 wrap-anywhere"><span class="font-semibold">{r.team}</span> {r.name}</span>
+							<span class="block text-xs break-words text-muted">
+								{[r.location, mode === 'event' && r.eventRank !== null ? `Rank ${r.eventRank}` : '', r.stats ? record(r.stats) : 'No matches']
+									.filter(Boolean)
+									.join(' · ')}
+							</span>
 							{#if r.stats}
-								<span class="mt-0.5 block truncate text-xs text-muted">
+								<span class="mt-0.5 block text-xs text-muted">
 									{#each season.components as c, i (c.key)}{i ? ' · ' : ''}{c.short}&nbsp;<span class="text-ink">{num(r.stats.opr[c.key])}</span>{/each}
 								</span>
 							{/if}
 							{#if mode === 'season' && r.event}
-								<span class="block truncate text-[11px] text-muted">{r.event.name}</span>
+								<span class="line-clamp-2 text-[11px] text-muted wrap-anywhere">{r.event.name}</span>
 							{/if}
 						</span>
-						<span class="text-right">
+						<span class="shrink-0 text-right">
 							<span class="block font-display text-2xl leading-7">{num(r.stats?.oprNp)}</span>
-							<span class="block text-[11px] whitespace-nowrap text-muted">
-								{[mode === 'event' && r.eventRank !== null ? `Rank ${r.eventRank}` : '', r.stats ? record(r.stats) : 'No matches']
-									.filter(Boolean)
-									.join(' · ')}
-							</span>
+							<span class="block text-[11px] text-muted">OPR</span>
 						</span>
 					</a>
 				</li>

@@ -139,8 +139,8 @@
 				{/if}
 			</div>
 			{#if t}
-				<p class="mt-1.5 truncate font-semibold">{t.name}</p>
-				<p class="truncate text-sm text-muted">{place(t.location)}</p>
+				<p class="mt-1.5 font-semibold wrap-anywhere">{t.name}</p>
+				<p class="text-sm break-words text-muted">{place(t.location)}</p>
 			{:else if team.isPending}
 				<div class="mt-2 h-5 w-48 animate-pulse rounded-lg bg-line"></div>
 			{/if}
@@ -194,8 +194,8 @@
 					</li>
 				{/each}
 				{#if scope.kind === 'event'}
-					<li class="flex min-h-10 min-w-0 items-center gap-1.5 rounded-full bg-accent-soft px-3.5 text-sm text-accent">
-						<span class="truncate">{scope.name}</span>
+					<li class="flex min-h-10 min-w-0 flex-wrap items-center gap-x-1.5 rounded-3xl bg-accent-soft px-3.5 py-1.5 text-sm text-accent">
+						<span class="min-w-0 wrap-anywhere">{scope.name}</span>
 						{#if scope.entry?.rank}
 							<span class="shrink-0 font-semibold">#{scope.entry.rank}</span>
 							<span class="shrink-0 text-xs opacity-70">/ {scope.entry.count} by OPR</span>
