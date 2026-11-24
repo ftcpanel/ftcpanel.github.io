@@ -224,7 +224,8 @@ function mirrorEntry(src: HTMLElement, options: GlassOptions): Entry {
 		// Form controls' live state doesn't clone (e.g. a <select>'s chosen option).
 		const live = src.querySelectorAll<HTMLSelectElement | HTMLInputElement>('select, input');
 		copy.querySelectorAll<HTMLSelectElement | HTMLInputElement>('select, input').forEach((c, i) => (c.value = live[i].value));
-		mirror.replaceChildren(...copy.childNodes);
+		// Keep the canvas the library put in the mirror (its rendered glass); replace only the content.
+		mirror.replaceChildren(...mirror.querySelectorAll(':scope > canvas'), ...copy.childNodes);
 		mirror.className = `${src.className} glass-mirror`;
 		// The mirror lives outside the original's ancestors, so carry over inherited text styles.
 		const cs = getComputedStyle(src);

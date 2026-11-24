@@ -43,10 +43,14 @@ const fold = (s: string) =>
 
 const words = (s: string) => fold(s).split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 
+/** Full name of a US state / Canadian province code ("TX" → "Texas"); undefined elsewhere. */
+export function stateName(country: string, state: string): string | undefined {
+	return country === 'USA' ? US_STATES[state] : country === 'Canada' ? CA_PROVINCES[state] : undefined;
+}
+
 function locationWords(e: SearchableEvent): string[] {
 	const { city, state, country } = e.location;
-	const region = country === 'USA' ? US_STATES[state] : country === 'Canada' ? CA_PROVINCES[state] : undefined;
-	return words([city, state, region ?? '', country, COUNTRY_ALIASES[country] ?? ''].join(' '));
+	return words([city, state, stateName(country, state) ?? '', country, COUNTRY_ALIASES[country] ?? ''].join(' '));
 }
 
 /** Events matching every word of `text` (as a word prefix), best matches first, then by date. */

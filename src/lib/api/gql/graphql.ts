@@ -306,6 +306,46 @@ export type SeasonEventsQueryVariables = Exact<{
 
 export type SeasonEventsQuery = { eventsSearch: Array<{ season: number, code: string, name: string, type: EventType, start: string, end: string, started: boolean, ongoing: boolean, finished: boolean, hasMatches: boolean, remote: boolean, location: { city: string, state: string, country: string } }> };
 
+export type LeaderboardQueryVariables = Exact<{
+  season: number;
+  region?: RegionOption | null | undefined;
+  skip: number;
+  take: number;
+}>;
+
+
+export type LeaderboardQuery = { tepRecords: { count: number, offset: number, data: Array<{ filterSkipRank: number, data: { teamNumber: number, eventCode: string, team: { name: string, location: { city: string, state: string, country: string } }, event: { name: string, start: string }, stats:
+          | { __typename: 'TeamEventStats2019' }
+          | { __typename: 'TeamEventStats2020Remote' }
+          | { __typename: 'TeamEventStats2020Trad' }
+          | { __typename: 'TeamEventStats2021Remote' }
+          | { __typename: 'TeamEventStats2021Trad' }
+          | { __typename: 'TeamEventStats2022' }
+          | { __typename: 'TeamEventStats2023' }
+          | { __typename: 'TeamEventStats2024' }
+          | { __typename: 'TeamEventStats2025' }
+          | { __typename: 'TeamEventStats2026', rank: number, rp: number, tb1: number, tb2: number, wins: number, losses: number, ties: number, dqs: number, qualMatchesPlayed: number, opr: { totalPointsNp: number, autoPoints: number, dcPoints: number, dcParkPoints: number, swarmRp: number, pollinator1Rp: number, pollinator2Rp: number }, avg: { totalPointsNp: number, autoPoints: number, dcPoints: number, dcParkPoints: number, swarmRp: number, pollinator1Rp: number, pollinator2Rp: number }, max: { totalPointsNp: number } }
+         | null } }> } };
+
+export type TeamMatchesQueryVariables = Exact<{
+  number: number;
+  season: number;
+}>;
+
+
+export type TeamMatchesQuery = { teamByNumber: { number: number, matches: Array<{ eventCode: string, matchId: number, alliance: Alliance, match: { id: number, tournamentLevel: TournamentLevel, series: number, matchNum: number, description: string, hasBeenPlayed: boolean, scheduledStartTime: string | null, actualStartTime: string | null, postResultTime: string | null, teams: Array<{ teamNumber: number, alliance: Alliance, station: Station, allianceRole: AllianceRole, surrogate: boolean, noShow: boolean, dq: boolean }>, scores:
+          | { __typename: 'MatchScores2019' }
+          | { __typename: 'MatchScores2020Remote' }
+          | { __typename: 'MatchScores2020Trad' }
+          | { __typename: 'MatchScores2021Remote' }
+          | { __typename: 'MatchScores2021Trad' }
+          | { __typename: 'MatchScores2022' }
+          | { __typename: 'MatchScores2023' }
+          | { __typename: 'MatchScores2024' }
+          | { __typename: 'MatchScores2025' }
+          | { __typename: 'MatchScores2026', red: { totalPoints: number, totalPointsNp: number, penaltyPointsByOpp: number, autoPoints: number, autoLeavePoints: number, autoParkPoints: number, autoHivePoints: number, dcPoints: number, dcHivePoints: number, dcFlowerPoints: number, dcGardenPoints: number, dcParkPoints: number, swarmRp: boolean, pollinator1Rp: boolean, pollinator2Rp: boolean, tips: number, minorsCommitted: number, majorsCommitted: number }, blue: { totalPoints: number, totalPointsNp: number, penaltyPointsByOpp: number, autoPoints: number, autoLeavePoints: number, autoParkPoints: number, autoHivePoints: number, dcPoints: number, dcHivePoints: number, dcFlowerPoints: number, dcGardenPoints: number, dcParkPoints: number, swarmRp: boolean, pollinator1Rp: boolean, pollinator2Rp: boolean, tips: number, minorsCommitted: number, majorsCommitted: number } }
+         | null } }> } | null };
+
 export type TeamSearchQueryVariables = Exact<{
   text: string;
 }>;
@@ -766,6 +806,139 @@ export const SeasonEventsDocument = new TypedDocumentString(`
     country
   }
 }`) as unknown as TypedDocumentString<SeasonEventsQuery, SeasonEventsQueryVariables>;
+export const LeaderboardDocument = new TypedDocumentString(`
+    query Leaderboard($season: Int!, $region: RegionOption, $skip: Int!, $take: Int!) {
+  tepRecords(
+    season: $season
+    region: $region
+    sortBy: "opr.totalPointsNp"
+    sortDir: Desc
+    skip: $skip
+    take: $take
+  ) {
+    count
+    offset
+    data {
+      filterSkipRank
+      data {
+        teamNumber
+        eventCode
+        team {
+          name
+          location {
+            city
+            state
+            country
+          }
+        }
+        event {
+          name
+          start
+        }
+        stats {
+          ...TeamStats
+        }
+      }
+    }
+  }
+}
+    fragment StatGroup2026 on TeamEventStats2026Group {
+  totalPointsNp
+  autoPoints
+  dcPoints
+  dcParkPoints
+  swarmRp
+  pollinator1Rp
+  pollinator2Rp
+}
+fragment TeamStats on TeamEventStats {
+  __typename
+  ... on TeamEventStats2026 {
+    rank
+    rp
+    tb1
+    tb2
+    wins
+    losses
+    ties
+    dqs
+    qualMatchesPlayed
+    opr {
+      ...StatGroup2026
+    }
+    avg {
+      ...StatGroup2026
+    }
+    max {
+      totalPointsNp
+    }
+  }
+}`) as unknown as TypedDocumentString<LeaderboardQuery, LeaderboardQueryVariables>;
+export const TeamMatchesDocument = new TypedDocumentString(`
+    query TeamMatches($number: Int!, $season: Int!) {
+  teamByNumber(number: $number) {
+    number
+    matches(season: $season) {
+      eventCode
+      matchId
+      alliance
+      match {
+        ...MatchFields
+      }
+    }
+  }
+}
+    fragment Alliance2026 on MatchScores2026Alliance {
+  totalPoints
+  totalPointsNp
+  penaltyPointsByOpp
+  autoPoints
+  autoLeavePoints
+  autoParkPoints
+  autoHivePoints
+  dcPoints
+  dcHivePoints
+  dcFlowerPoints
+  dcGardenPoints
+  dcParkPoints
+  swarmRp
+  pollinator1Rp
+  pollinator2Rp
+  tips
+  minorsCommitted
+  majorsCommitted
+}
+fragment MatchFields on Match {
+  id
+  tournamentLevel
+  series
+  matchNum
+  description
+  hasBeenPlayed
+  scheduledStartTime
+  actualStartTime
+  postResultTime
+  teams {
+    teamNumber
+    alliance
+    station
+    allianceRole
+    surrogate
+    noShow
+    dq
+  }
+  scores {
+    __typename
+    ... on MatchScores2026 {
+      red {
+        ...Alliance2026
+      }
+      blue {
+        ...Alliance2026
+      }
+    }
+  }
+}`) as unknown as TypedDocumentString<TeamMatchesQuery, TeamMatchesQueryVariables>;
 export const TeamSearchDocument = new TypedDocumentString(`
     query TeamSearch($text: String!) {
   teamsSearch(searchText: $text, limit: 8) {

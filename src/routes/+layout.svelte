@@ -19,6 +19,7 @@
 	const nav: { href: string; label: string; icon: IconName; match: (path: string) => boolean }[] = [
 		{ href: '/', label: 'My Team', icon: 'team', match: (p) => p === '/' },
 		{ href: '/events', label: 'Events', icon: 'calendar', match: (p) => p.startsWith('/events') },
+		{ href: '/teams', label: 'Teams', icon: 'podium', match: (p) => p.startsWith('/teams') || p.startsWith('/compare') },
 		{ href: '/settings', label: 'Settings', icon: 'settings', match: (p) => p.startsWith('/settings') }
 	];
 	const path = $derived(page.url.pathname);
@@ -101,13 +102,11 @@
 		>
 			{#each nav as item (item.href)}
 				{@const active = item.match(path)}
+				<!-- Icon over label: four tabs fit a 360 px phone. -->
 				<a
 					href={item.href}
 					aria-current={active ? 'page' : undefined}
-					aria-label={item.label}
-					class="flex h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition {item.href === '/settings'
-						? 'min-w-12 px-3.5'
-						: 'min-w-28'} {active
+					class="flex h-14 w-[4.75rem] flex-col items-center justify-center gap-0.5 rounded-full text-[11px] font-medium transition {active
 						? glassy
 							? 'bg-white text-[#16161d] shadow-[0_6px_18px_-8px_rgb(0_0_0/0.4)]'
 							: 'bg-ink text-bg'
@@ -116,8 +115,7 @@
 							: 'text-muted hover:text-ink'}"
 				>
 					<Icon name={item.icon} class="size-5" />
-					<!-- Settings is icon-only on phones to keep the pill compact. -->
-					{#if item.href !== '/settings'}{item.label}{/if}
+					{item.label}
 				</a>
 			{/each}
 		</nav>

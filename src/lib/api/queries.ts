@@ -185,6 +185,59 @@ export const SeasonEventsQuery = graphql(`
 	}
 `);
 
+/**
+ * Team leaderboard page: team-event records by OPR (FTC Scout only sorts by total OPR here; nested
+ * sort keys are ignored). A team appears once per event; `filterSkipRank` is its rank among unique
+ * teams and is 0 on its weaker events, so keep rows with `filterSkipRank > 0`.
+ */
+export const LeaderboardQuery = graphql(`
+	query Leaderboard($season: Int!, $region: RegionOption, $skip: Int!, $take: Int!) {
+		tepRecords(season: $season, region: $region, sortBy: "opr.totalPointsNp", sortDir: Desc, skip: $skip, take: $take) {
+			count
+			offset
+			data {
+				filterSkipRank
+				data {
+					teamNumber
+					eventCode
+					team {
+						name
+						location {
+							city
+							state
+							country
+						}
+					}
+					event {
+						name
+						start
+					}
+					stats {
+						...TeamStats
+					}
+				}
+			}
+		}
+	}
+`);
+
+/** A team's matches this season with results (head-to-head in compare). */
+export const TeamMatchesQuery = graphql(`
+	query TeamMatches($number: Int!, $season: Int!) {
+		teamByNumber(number: $number) {
+			number
+			matches(season: $season) {
+				eventCode
+				matchId
+				alliance
+				match {
+					...MatchFields
+				}
+			}
+		}
+	}
+`);
+
 export const TeamSearchQuery = graphql(`
 	query TeamSearch($text: String!) {
 		teamsSearch(searchText: $text, limit: 8) {

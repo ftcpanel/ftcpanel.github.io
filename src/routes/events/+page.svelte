@@ -4,6 +4,7 @@
 	import { SeasonEventsQuery } from '#lib/api/queries.ts';
 	import EventCard from '#lib/components/EventCard.svelte';
 	import EventLists from '#lib/components/EventLists.svelte';
+	import EventsNearYou from '#lib/components/EventsNearYou.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 	import { searchEvents } from '#lib/search/events.ts';
 	import { CURRENT_SEASON, seasonInfo } from '#lib/seasons/index.ts';
@@ -94,6 +95,7 @@
 			{/if}
 		{/if}
 	{:else}
+		<EventsNearYou />
 		<EventLists />
 	{/if}
 </div>

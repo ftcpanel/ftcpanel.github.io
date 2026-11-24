@@ -14,6 +14,9 @@
 	const team = createQuery(() => ({ ...teamQueryOptions(number ?? 0), enabled: number !== null }));
 	const t = $derived(team.data?.teamByNumber);
 	const isMine = $derived(number !== null && myTeam.current?.number === number);
+	const compareHref = $derived(
+		myTeam.current && !isMine ? `/compare?teams=${myTeam.current.number},${number}` : `/compare?teams=${number}`
+	);
 
 	// Back returns to the previous in-app page; opened directly (shared link), it goes home.
 	let canGoBack = $state(false);
@@ -35,18 +38,26 @@
 		<a {@attach glass()} href="/" onclick={back} class="glass grid size-11 shrink-0 place-items-center rounded-full" aria-label="Back">
 			<Icon name="back" class="size-5" />
 		</a>
-		{#if t && !isMine}
-			<button
-				type="button"
-				{@attach glass()}
-				class="glass flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium"
-				onclick={() => myTeam.set({ number: t.number, name: t.name })}
-			>
-				Set as my team
-			</button>
-		{:else if isMine}
-			<span {@attach glass()} class="glass flex h-11 items-center rounded-full px-4 text-sm font-medium">Your team</span>
-		{/if}
+		<div class="flex min-w-0 items-center gap-2">
+			{#if number !== null}
+				<a {@attach glass()} href={compareHref} class="glass flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium">
+					<Icon name="swap" class="size-4" />
+					Compare
+				</a>
+			{/if}
+			{#if t && !isMine}
+				<button
+					type="button"
+					{@attach glass()}
+					class="glass flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium"
+					onclick={() => myTeam.set({ number: t.number, name: t.name })}
+				>
+					Set as my team
+				</button>
+			{:else if isMine}
+				<span {@attach glass()} class="glass flex h-11 items-center rounded-full px-4 text-sm font-medium">Your team</span>
+			{/if}
+		</div>
 	</header>
 
 	{#if number === null}

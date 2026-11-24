@@ -256,13 +256,13 @@ Offline (Phase 6): installable PWA; last-known data with a "stale since hh:mm" b
 | `/` | My Team if set, else live events + search | Live / Baseline |
 | `/me` | Team Center | Live |
 | `/teams/[number]` | Team profile (built): same overview as My Team (`TeamOverview.svelte`) with a back arrow and "Set as my team"; team numbers/names link here from rankings, match breakdowns and matchups | Warm + Baseline |
-| `/events` | Live / this week / upcoming | Warm |
+| `/events` | Search (name, code, city, state/province, country; local over the season list), **Near you** (country + state picker; defaults to the last pick, my team's area, else the browser's country), live / upcoming / recent | Warm |
 | `/events/[season]/[code]` | Rankings, matches, insights | Live |
 | `/events/[season]/[code]/matchup` | Matchup predictor (built) | Live |
 | `/events/[season]/[code]/predict` | Simulator, alliance selection, bracket | Live + worker |
-| `/compare` | Multi-team comparison | Warm + Baseline |
+| `/compare?teams=a,b,…` | Team comparison (built): 2–4 teams, stats table, OPR-by-event and component charts, head-to-head, what-if alliance | Warm |
 | `/predict` | Match predictor | Baseline + live delta |
-| `/rankings` | Leaderboards | Baseline |
+| `/teams` | Team leaderboard (built): global / national / regional / event scope by best event OPR (`tepRecords`, deduped by `filterSkipRank`; FTC Scout only sorts by total OPR), team lookup with stats and scoped ranks | Warm |
 | `/accuracy` | Model accuracy | Baseline |
 | `/settings` | Theme (Simple default / Glass, built) and my team (built); watchlist and data reset later | Local |
 
