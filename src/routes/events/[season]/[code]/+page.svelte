@@ -60,7 +60,7 @@
 		</p>
 	{:else if feed}
 		<!-- Page header -->
-		<section class="relative text-ink" aria-label="Event overview">
+		<section class="hero relative text-ink" aria-label="Event overview">
 			<div class="flex items-center justify-between gap-3">
 				<a href="/events" class="chip grid size-11 place-items-center rounded-full" aria-label="Back to events">
 					<Icon name="back" class="size-5" />

@@ -136,7 +136,7 @@
 	{@const loser = other(lead)}
 	{@const margin = Math.abs(result.red.total - result.blue.total)}
 	<!-- Actual result on the page background -->
-	<section class="relative text-ink" aria-label="Result">
+	<section class="hero relative text-ink" aria-label="Result">
 		{@render header?.()}
 
 		<div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
@@ -376,7 +376,7 @@
 	</div>
 {:else}
 	<!-- Headline prediction on the page background -->
-	<section class="relative text-ink" aria-label="Prediction">
+	<section class="hero relative text-ink" aria-label="Prediction">
 		{@render header?.()}
 
 		<div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">

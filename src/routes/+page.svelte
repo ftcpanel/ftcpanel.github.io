@@ -33,7 +33,7 @@
 	</header>
 
 	{#if !myTeam.current || changing}
-		<section class="relative mt-10 text-ink">
+		<section class="hero relative mt-10 text-ink">
 			<p class="text-ink/75">{season.name} · {CURRENT_SEASON}–{(CURRENT_SEASON + 1) % 100}</p>
 			<h2 class="mt-2 max-w-xl font-display text-4xl leading-tight sm:text-6xl">Your team's live panel</h2>
 			<p class="mt-3 mb-8 max-w-md text-ink/80">

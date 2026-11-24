@@ -7,6 +7,12 @@
 		<meta name="description" content="Live FTC rankings, matches, and team analytics powered by FTC Scout." />
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#0e0e13" media="(prefers-color-scheme: dark)" />
+		<script>
+			// Theme before first paint (src/lib/stores/theme.svelte.ts).
+			try {
+				if (localStorage.getItem('ftcpanel:theme') === 'gradient') document.documentElement.dataset.theme = 'gradient';
+			} catch {}
+		</script>
 		<title>FTCPanel</title>
 		%sveltekit.head%
 	</head>

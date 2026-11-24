@@ -1,6 +1,12 @@
 <script lang="ts">
 	import TeamPicker from '#lib/components/TeamPicker.svelte';
 	import { myTeam } from '#lib/stores/myTeam.svelte.ts';
+	import { theme, type Theme } from '#lib/stores/theme.svelte.ts';
+
+	const themes: { value: Theme; label: string; blurb: string }[] = [
+		{ value: 'simple', label: 'Simple', blurb: 'Everything flat and outlined.' },
+		{ value: 'gradient', label: 'Gradient', blurb: 'Page headers (big numbers, charts) on a colorful gradient panel.' }
+	];
 
 	let changingTeam = $state(false);
 </script>
@@ -11,7 +17,42 @@
 	<h1 class="font-display text-4xl">Settings</h1>
 	<p class="mt-1 text-muted">Saved on this device only.</p>
 
-	<section class="card mt-8 p-5 sm:p-6" aria-labelledby="team-h">
+	<section class="card mt-8 p-5 sm:p-6" aria-labelledby="theme-h">
+		<h2 id="theme-h" class="text-lg font-semibold tracking-tight">Theme</h2>
+		<p class="text-sm text-muted">Dark mode follows your device in both.</p>
+		<div class="mt-4 grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby="theme-h">
+			{#each themes as t (t.value)}
+				{@const active = theme.current === t.value}
+				<button
+					type="button"
+					role="radio"
+					aria-checked={active}
+					onclick={() => theme.set(t.value)}
+					class="rounded-3xl p-3 text-left transition {active ? 'bg-accent-soft ring-2 ring-accent' : 'bg-surface-2 hover:bg-line'}"
+				>
+					<!-- Mini page: a header block above two cards. -->
+					<span class="block space-y-2 rounded-2xl bg-bg p-2.5 shadow-[inset_0_0_0_1px_var(--line)]" aria-hidden="true">
+						<span
+							class="block h-12 rounded-xl px-3 pt-2 {t.value === 'gradient' ? 'text-white' : 'bg-surface text-ink shadow-[inset_0_0_0_1px_var(--line)]'}"
+							style:background={t.value === 'gradient' ? 'linear-gradient(150deg, #2a5db5, #5e5fcb 45%, #a274c4 78%, #eaa3b6)' : undefined}
+						>
+							<span class="font-display text-xl leading-none">94.9</span>
+						</span>
+						<span class="flex gap-2">
+							<span class="h-6 flex-1 rounded-lg bg-surface shadow-[inset_0_0_0_1px_var(--line)]"></span>
+							<span class="h-6 flex-1 rounded-lg bg-surface shadow-[inset_0_0_0_1px_var(--line)]"></span>
+						</span>
+					</span>
+					<span class="mt-3 flex items-center justify-between px-1">
+						<span class="font-semibold">{t.label}</span>
+						{#if active}<span class="text-xs font-semibold text-accent">On</span>{/if}
+					</span>
+					<span class="mt-0.5 block px-1 text-sm text-muted">{t.blurb}</span>
+				</button>
+			{/each}
+		</div>
+	</section>
+	<section class="card mt-4 p-5 sm:p-6" aria-labelledby="team-h">
 		<h2 id="team-h" class="text-lg font-semibold tracking-tight">My team</h2>
 		{#if myTeam.current && !changingTeam}
 			<div class="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-surface-2 px-4 py-3">

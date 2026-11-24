@@ -96,7 +96,7 @@
 	</p>
 {:else}
 	<!-- Headline number + chart on the page -->
-	<section class="relative mt-8 text-ink" aria-label="Team {number}">
+	<section class="hero relative mt-8 text-ink" aria-label="Team {number}">
 		<p class="text-ink/80">
 			{t?.name ?? name ?? ''}{#if t}&nbsp;· {place(t.location)}{/if}
 		</p>

@@ -153,11 +153,11 @@
 		{/snippet}
 
 		{#if feed.status === 'loading' && !feed.info}
-			<section class="relative h-80 text-ink">
+			<section class="hero relative h-80 text-ink">
 				{@render header()}
 			</section>
 		{:else if !alliances || !prediction || !feed.model.hasData}
-			<section class="relative pb-4 text-ink">
+			<section class="hero relative pb-4 text-ink">
 				{@render header()}
 				<p class="mt-8 max-w-lg text-ink/85">
 					{#if !alliances}

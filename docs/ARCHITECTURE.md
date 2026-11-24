@@ -230,6 +230,8 @@ FTC Scout OPR is shown next to model strengths, not replaced.
 
 Design language (`src/routes/layout.css`): soft and friendly, one flat theme. The page is plain (white, near-black in dark mode, following the device). Page headers sit directly on it: title, one big headline number with its unit, outlined `chip` pills, and a `HeroChart` (violet line with a soft fill, faint grid, x-axis labels, the latest point marked with a drop line and a note pill). Everything else lives in outlined white cards with continuous "squircle" corners (`corner-shape: squircle` where supported, plain rounded corners elsewhere); the desktop rail is the same kind of outlined sheet. Colors come from the FIRST logo: blue and red are the alliance colors and appear wherever alliances do (match rows, win bars, the red-vs-blue win chip); violet, their blend, marks "you" highlights and links, never an alliance. Logo: friendly outlined robot head with one plain eye and one red/blue win-probability ring eye (`Logo.svelte`); the favicon (`src/lib/assets/favicon.svg`) is the same head redrawn to fill the square at 16 px, on no background.
 
+Gradient theme (Settings → Theme; `src/lib/stores/theme.svelte.ts`, `data-theme="gradient"` on `<html>`, applied before first paint by `src/app.html`): the page stays flat, but page headers marked `hero` (My Team / team header, event header, matchup result and prediction) become rounded FIRST blue → violet → rose gradient panels. `hero` re-points the color tokens inside the panel (ink, muted, accent, surface, line → white tones), so the same markup (chips, hero chart, segmented controls, pickers) renders white-on-gradient with no per-component theme code.
+
 Phone:
 - Floating tab pill (**My Team · Events · Teams · Settings**, icon over label) with safe-area insets; sticky Rankings/Matches tabs on event pages with a "N new" badge.
 - Compact ranking rows that expand on tap; match cards that expand into a breakdown; native `<select>`s for matchup team pickers.
@@ -260,7 +262,7 @@ Offline (Phase 6): installable PWA; last-known data with a "stale since hh:mm" b
 | `/predict` | Match predictor | Baseline + live delta |
 | `/teams` | Team leaderboard (built): global / national / regional / event scope by best event OPR (`tepRecords`, deduped by `filterSkipRank`; FTC Scout only sorts by total OPR), team lookup with stats and scoped ranks | Warm |
 | `/accuracy` | Model accuracy | Baseline |
-| `/settings` | My team (built); watchlist and data reset later | Local |
+| `/settings` | Theme (Simple default / Gradient headers) and my team (built); watchlist and data reset later | Local |
 
 ## 11. Repo layout
 
