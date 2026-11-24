@@ -19,7 +19,6 @@
 	import ScopeRanks from '#lib/components/ScopeRanks.svelte';
 	import TeamEventLive from '#lib/components/TeamEventLive.svelte';
 	import { num, place, record } from '#lib/format.ts';
-	import { glass } from '#lib/glass/layer.ts';
 	import { acquireLiveEvent, type LiveEvent } from '#lib/live/liveEvent.svelte.ts';
 	import { rankHistory } from '#lib/model/rankHistory.ts';
 	import { normalizeStats, seasonInfo } from '#lib/seasons/index.ts';
@@ -96,22 +95,22 @@
 		<a href="/events" class="text-accent underline">Browse events</a>
 	</p>
 {:else}
-	<!-- Headline number + chart on the gradient -->
-	<section class="relative mt-8 text-on-bg" aria-label="Team {number}">
-		<p class="text-on-bg/80">
+	<!-- Headline number + chart on the page -->
+	<section class="relative mt-8 text-ink" aria-label="Team {number}">
+		<p class="text-ink/80">
 			{t?.name ?? name ?? ''}{#if t}&nbsp;· {place(t.location)}{/if}
 		</p>
 		<div class="mt-1 flex flex-wrap items-end gap-x-4 gap-y-2">
 			<p class="font-display text-7xl leading-none sm:text-8xl">{number}</p>
 			{#if topPct !== null}
-				<span {@attach glass()} class="glass mb-2 rounded-full px-3 py-1 text-sm font-medium">
+				<span class="chip mb-2 rounded-full px-3 py-1 text-sm font-medium">
 					Top {topPct < 10 ? topPct.toFixed(1) : Math.round(topPct)}% worldwide
 				</span>
 			{/if}
 		</div>
 		{#if played.length >= 2}
 			<div class="mt-6">
-				<p class="mb-1 text-sm text-on-bg/80">OPR by event</p>
+				<p class="mb-1 text-sm text-ink/80">OPR by event</p>
 				<HeroChart
 					values={played.map((e) => e.stats!.oprNp)}
 					labels={played.map((e) => shortDate(e.event.start))}
@@ -165,7 +164,7 @@
 		{/if}
 
 		<section class="pt-4">
-			<h2 class="mb-3 text-lg font-semibold tracking-tight text-on-bg">This season's events</h2>
+			<h2 class="mb-3 text-lg font-semibold tracking-tight text-ink">This season's events</h2>
 			<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
 				{#each events as e (e.event.code)}
 					<EventCard event={e.event}>
@@ -177,7 +176,7 @@
 					</EventCard>
 				{:else}
 					{#if !team.isPending}
-						<p class="text-sm text-on-bg/80">Not registered for any events yet.</p>
+						<p class="text-sm text-ink/80">Not registered for any events yet.</p>
 					{/if}
 				{/each}
 			</div>

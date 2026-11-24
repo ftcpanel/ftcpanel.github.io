@@ -11,7 +11,6 @@
 	import { teamQueryOptions } from '#lib/components/TeamOverview.svelte';
 	import TeamPicker from '#lib/components/TeamPicker.svelte';
 	import { num } from '#lib/format.ts';
-	import { glass } from '#lib/glass/layer.ts';
 	import { compareTeam, MAX_COMPARE, meetings, parseTeams, slotColor, type CompareTeam } from '#lib/model/compare.ts';
 	import { CURRENT_SEASON, normalizeMatch, seasonInfo } from '#lib/seasons/index.ts';
 	import { myTeam } from '#lib/stores/myTeam.svelte.ts';
@@ -91,22 +90,22 @@
 <svelte:window onkeydown={(e) => e.key === 'Escape' && (adding = false)} />
 
 <div class="mx-auto max-w-screen-2xl px-4 pt-[max(1.25rem,env(safe-area-inset-top))] pb-8 lg:px-10 lg:pt-10">
-	<header class="mb-8 text-on-bg">
-		<p class="text-on-bg/75">
+	<header class="mb-8 text-ink">
+		<p class="text-ink/75">
 			{season.name} · {CURRENT_SEASON}–{(CURRENT_SEASON + 1) % 100}
 		</p>
 		<h1 class="mt-1 font-display text-5xl">Compare</h1>
 
 		<ul class="mt-5 flex flex-wrap items-center gap-2" aria-label="Compared teams">
 			{#each columns as c (c.number)}
-				<li {@attach glass()} class="glass flex h-11 max-w-full items-center rounded-full pr-0.5 pl-4 text-sm">
+				<li class="chip flex h-11 max-w-full items-center rounded-full pr-0.5 pl-4 text-sm">
 					<span class="mr-2 size-2.5 shrink-0 rounded-full" style:background={slotColor(c.slot)}></span>
 					<a href="/teams/{c.number}" class="flex min-w-0 items-baseline gap-1.5 hover:underline">
 						<span class="font-semibold">{c.number}</span>
 						{#if c.missing}
-							<span class="text-on-bg/75">not found</span>
+							<span class="text-ink/75">not found</span>
 						{:else if c.name}
-							<span class="max-w-[9rem] truncate text-on-bg/75 sm:max-w-[14rem]">{c.name}</span>
+							<span class="max-w-[9rem] truncate text-ink/75 sm:max-w-[14rem]">{c.name}</span>
 						{/if}
 					</a>
 					<button
@@ -123,8 +122,7 @@
 				<li>
 					<button
 						type="button"
-						{@attach glass()}
-						class="glass flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium"
+						class="chip flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium"
 						aria-expanded={adding}
 						onclick={() => (adding = !adding)}
 					>
@@ -138,7 +136,7 @@
 		{#if pickerOpen}
 			<div class="mt-4 max-w-md">
 				{#if teams.length < 2}
-					<p class="mb-2 text-sm text-on-bg/75">
+					<p class="mb-2 text-sm text-ink/75">
 						{teams.length === 0
 							? 'Pick two to four teams to compare.'
 							: `Add a team to compare with ${teams[0]}.`}

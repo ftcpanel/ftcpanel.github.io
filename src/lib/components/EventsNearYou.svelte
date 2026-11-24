@@ -108,11 +108,11 @@
 
 <section class="mb-10" aria-labelledby="near-h">
 	<div class="mb-3 flex flex-wrap items-end justify-between gap-3">
-		<div class="text-on-bg">
+		<div class="text-ink">
 			<h2 id="near-h" class="flex items-center gap-2 text-lg font-semibold tracking-tight">
 				<Icon name="pin" class="size-5" /> Near you
 			</h2>
-			<p class="text-sm text-on-bg/75">
+			<p class="text-sm text-ink/75">
 				{#if area}
 					{coming.length ? `${coming.length} coming up` : 'Nothing coming up'}{past.length ? ` · ${past.length} earlier this season` : ''}
 				{:else}

@@ -46,9 +46,9 @@
 <svelte:window {onkeydown} />
 
 <div class="mx-auto max-w-screen-2xl px-4 pt-[max(1.25rem,env(safe-area-inset-top))] pb-6 lg:px-10 lg:pt-10">
-	<header class="relative mb-8 flex flex-col gap-5 text-on-bg sm:flex-row sm:items-end sm:justify-between">
+	<header class="relative mb-8 flex flex-col gap-5 text-ink sm:flex-row sm:items-end sm:justify-between">
 		<div>
-			<p class="text-on-bg/75">
+			<p class="text-ink/75">
 				{seasonInfo(CURRENT_SEASON).name} · {CURRENT_SEASON}–{(CURRENT_SEASON + 1) % 100}
 			</p>
 			<h1 class="mt-1 font-display text-5xl">Events</h1>
@@ -74,18 +74,18 @@
 
 	{#if debounced}
 		{#if all.isPending}
-			<p class="text-sm text-on-bg/80">Searching…</p>
+			<p class="text-sm text-ink/80">Searching…</p>
 		{:else if all.isError}
 			<p class="text-sm text-red-al">{all.error.message}</p>
 		{:else}
-			<p class="mb-3 text-sm text-on-bg/75">
+			<p class="mb-3 text-sm text-ink/75">
 				{results.length === 1 ? '1 event' : `${results.length.toLocaleString()} events`} matching “{debounced}”
 			</p>
 			<div class="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
 				{#each showAll ? results : results.slice(0, SHOWN) as event (event.code)}
 					<EventCard {event} />
 				{:else}
-					<p class="text-sm text-on-bg/80">No events match “{debounced}”. Try a name, city, state or country.</p>
+					<p class="text-sm text-ink/80">No events match “{debounced}”. Try a name, city, state or country.</p>
 				{/each}
 			</div>
 			{#if !showAll && results.length > SHOWN}

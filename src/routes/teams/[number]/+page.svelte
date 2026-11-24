@@ -4,7 +4,6 @@
 	import { page } from '$app/state';
 	import Icon from '#lib/components/Icon.svelte';
 	import TeamOverview, { teamQueryOptions } from '#lib/components/TeamOverview.svelte';
-	import { glass } from '#lib/glass/layer.ts';
 	import { myTeam } from '#lib/stores/myTeam.svelte.ts';
 
 	const raw = $derived(page.params.number ?? '');
@@ -33,14 +32,14 @@
 <svelte:head><title>{number ?? raw}{t ? ` ${t.name}` : ''} · FTCPanel</title></svelte:head>
 
 <div class="mx-auto max-w-6xl px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-8 lg:px-10 lg:pt-10">
-	<!-- Header on the gradient -->
-	<header class="flex items-center justify-between gap-3 text-on-bg">
-		<a {@attach glass()} href="/" onclick={back} class="glass grid size-11 shrink-0 place-items-center rounded-full" aria-label="Back">
+	<!-- Page header -->
+	<header class="flex items-center justify-between gap-3 text-ink">
+		<a href="/" onclick={back} class="chip grid size-11 shrink-0 place-items-center rounded-full" aria-label="Back">
 			<Icon name="back" class="size-5" />
 		</a>
 		<div class="flex min-w-0 items-center gap-2">
 			{#if number !== null}
-				<a {@attach glass()} href={compareHref} class="glass flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium">
+				<a href={compareHref} class="chip flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium">
 					<Icon name="swap" class="size-4" />
 					Compare
 				</a>
@@ -48,14 +47,13 @@
 			{#if t && !isMine}
 				<button
 					type="button"
-					{@attach glass()}
-					class="glass flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium"
+					class="chip flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium"
 					onclick={() => myTeam.set({ number: t.number, name: t.name })}
 				>
 					Set as my team
 				</button>
 			{:else if isMine}
-				<span {@attach glass()} class="glass flex h-11 items-center rounded-full px-4 text-sm font-medium">Your team</span>
+				<span class="chip flex h-11 items-center rounded-full px-4 text-sm font-medium">Your team</span>
 			{/if}
 		</div>
 	</header>

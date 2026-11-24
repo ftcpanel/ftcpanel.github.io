@@ -3,13 +3,9 @@
 @import '@fontsource-variable/outfit';
 
 /*
- * FTCPanel design language: soft and friendly. Two themes (`data-theme` on <html>, set before
- * first paint in app.html; changed in Settings):
- *   - simple (default): flat page, outlined white cards, no glass, dark text everywhere.
- *   - glass: FIRST blue → violet → rose gradient page, white text on it, real liquid glass.
- * Text placed directly on the page background uses `on-bg` (ink in simple, white in glass).
- * Colors come from the FIRST logo: blue and red (also the alliance colors), blended through
- * violet. Big numbers use a light geometric face.
+ * FTCPanel design language: soft and friendly. A flat page (white, near-black in dark mode),
+ * outlined white cards with large radii, dark text. Colors come from the FIRST logo: blue and red
+ * (also the alliance colors), blended through violet. Big numbers use a light geometric face.
  */
 
 @theme {
@@ -37,17 +33,12 @@
 	--color-comp-1: var(--comp-1);
 	--color-comp-2: var(--comp-2);
 	--color-comp-3: var(--comp-3);
-	--color-on-bg: var(--on-bg);
-	--color-hero-ink: var(--hero-ink);
 }
 
 :root {
 	--bg: #f3f3f7;
-	/* Flat page of the simple theme. */
+	/* The page itself. */
 	--page: #ffffff;
-	/* Text and the hero chart drawn straight on the page background. */
-	--on-bg: var(--ink);
-	--hero-ink: var(--accent);
 	--surface: #ffffff;
 	--surface-2: #f4f4f8;
 	--line: #e6e6ee;
@@ -67,14 +58,7 @@
 	--comp-1: #8b7cf6;
 	--comp-2: #3bb8d4;
 	--comp-3: #f2a4c0;
-	--hero-gradient: linear-gradient(155deg, #2a5db5 0%, #5e5fcb 42%, #a274c4 74%, #eaa3b6 100%);
-	/* Soft color blobs layered over the base gradient (FIRST blue and red, their violet blend). */
-	--blob-sky: rgb(110 182 255 / 0.65);
-	--blob-blue: rgb(30 110 230 / 0.6);
-	--blob-violet: rgb(140 92 240 / 0.5);
-	--blob-rose: rgb(240 90 120 / 0.55);
-	--blob-peach: rgb(255 196 176 / 0.6);
-	/* Simple theme: outlined cards. The glass theme floats them with a soft shadow (below). */
+	/* Cards are outlined, not floating. */
 	--card-shadow: inset 0 0 0 1px var(--line);
 	color-scheme: light;
 }
@@ -99,38 +83,14 @@
 		--comp-1: #a99bff;
 		--comp-2: #4fd0ea;
 		--comp-3: #f5a9c4;
-		/* Night version: deep navy → indigo → plum, with dimmer blobs. */
-		--hero-gradient: linear-gradient(155deg, #0a1124 0%, #121433 45%, #1c1231 75%, #280f22 100%);
-		--blob-sky: rgb(30 80 170 / 0.35);
-		--blob-blue: rgb(20 50 140 / 0.45);
-		--blob-violet: rgb(80 50 170 / 0.3);
-		--blob-rose: rgb(140 30 70 / 0.35);
-		--blob-peach: rgb(120 50 70 / 0.22);
-		--card-shadow: inset 0 0 0 1px var(--line);
 		color-scheme: dark;
-	}
-}
-
-:root[data-theme='glass'] {
-	--on-bg: #ffffff;
-	--hero-ink: #ffffff;
-}
-
-@media (prefers-color-scheme: light) {
-	:root[data-theme='glass'] {
-		--card-shadow: 0 1px 2px rgb(30 30 60 / 0.04), 0 14px 34px -14px rgb(40 40 100 / 0.16);
 	}
 }
 
 html {
 	-webkit-tap-highlight-color: transparent;
 	text-size-adjust: 100%;
-	/* Overscroll / rubber-band area: the page color (mid-gradient tone in the glass theme). */
 	background-color: var(--page);
-
-	&[data-theme='glass'] {
-		background-color: light-dark(#5e5fcb, #121433);
-	}
 }
 
 body {
@@ -174,76 +134,10 @@ body {
 	font-weight: 500;
 }
 
-/*
- * Page background: one fixed layer in the root layout. Simple theme: flat. Glass theme: full-page
- * gradient (fixed layer, so it also works on iOS where background-attachment: fixed doesn't); its
- * color blobs give liquid glass something to bend, as refraction over a smooth gradient is invisible.
- */
-@utility app-bg {
-	background: var(--page);
-
-	:root[data-theme='glass'] & {
-		background: var(--glass-page-bg);
-	}
-}
-
-/* The glass theme's page: the gradient with its color blobs (also used by the /glass playground). */
-:root {
-	--glass-page-bg:
-		radial-gradient(40% 35% at 88% 4%, var(--blob-sky), transparent 70%),
-		radial-gradient(45% 40% at 0% 28%, var(--blob-blue), transparent 70%),
-		radial-gradient(42% 36% at 58% 48%, var(--blob-violet), transparent 70%),
-		radial-gradient(45% 40% at 100% 78%, var(--blob-rose), transparent 70%),
-		radial-gradient(50% 40% at 12% 100%, var(--blob-peach), transparent 70%),
-		radial-gradient(60% 45% at 10% 0%, rgb(255 255 255 / 0.18), transparent 70%),
-		var(--hero-gradient);
-}
-
-/*
- * Chips and controls on the page background. Simple theme: a flat outlined pill. Glass theme: a
- * frosted CSS bubble as the fallback; with `{@attach glass()}` the element becomes real WebGL
- * liquid glass (src/lib/glass/layer.ts) and, once that is live (`data-liquid`), its own CSS
- * surface switches off.
- */
-@utility glass {
+/* Outlined pill for chips and small controls on the page (back buttons, badges, toggles). */
+@utility chip {
 	background: var(--surface);
 	box-shadow: inset 0 0 0 1px var(--line);
-
-	:root[data-theme='glass'] & {
-		background: linear-gradient(180deg, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.08));
-		box-shadow:
-			inset 0 0 0 1.5px rgb(255 255 255 / 0.42),
-			inset 0 2px 8px rgb(255 255 255 / 0.28),
-			0 8px 20px -10px rgb(20 10 60 / 0.4);
-		backdrop-filter: blur(16px) saturate(140%);
-	}
-
-	/* Live liquid glass draws its own surface. */
-	:root &[data-liquid] {
-		background: none;
-		box-shadow: none;
-		backdrop-filter: none;
-	}
-}
-
-/* Larger panel (desktop rail): outlined sheet in simple, quieter frosted rim in glass. */
-@utility glass-panel {
-	background: var(--surface);
-	box-shadow: inset 0 0 0 1px var(--line);
-
-	:root[data-theme='glass'] & {
-		background: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.06));
-		box-shadow:
-			inset 0 0 0 1px rgb(255 255 255 / 0.28),
-			0 20px 50px -24px rgb(20 10 60 / 0.5);
-		backdrop-filter: blur(24px) saturate(140%);
-	}
-
-	:root &[data-liquid] {
-		background: none;
-		box-shadow: none;
-		backdrop-filter: none;
-	}
 }
 
 @keyframes fresh-glow {
@@ -268,25 +162,4 @@ body {
 		animation-duration: 0.01ms !important;
 		transition-duration: 0.01ms !important;
 	}
-}
-
-/*
- * Liquid-glass mirrors (src/lib/glass/layer.ts): a live clone of an in-page glass component, laid
- * over it as a direct child of the glass root. Layout classes of the original must not apply.
- */
-.glass-mirror {
-	position: absolute !important;
-	inset: auto !important;
-	top: 0 !important;
-	left: 0 !important;
-	margin: 0 !important;
-	translate: none !important;
-	z-index: 30;
-	isolation: isolate;
-	pointer-events: none;
-}
-
-/* The original keeps layout, clicks and focus; the mirror shows it. */
-[data-glass-src] {
-	opacity: 0;
 }

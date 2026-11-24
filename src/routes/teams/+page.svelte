@@ -14,7 +14,6 @@
 	import TeamLookup from '#lib/components/TeamLookup.svelte';
 	import TeamStatCard, { type LeaderScope } from '#lib/components/TeamStatCard.svelte';
 	import { dateRange, place } from '#lib/format.ts';
-	import { glass } from '#lib/glass/layer.ts';
 	import { homeRegion, nationOf, nations, regionName, subregions, type RegionChoice } from '#lib/regions.ts';
 	import { CURRENT_SEASON, normalizeStats, seasonInfo } from '#lib/seasons/index.ts';
 	import { myTeam } from '#lib/stores/myTeam.svelte.ts';
@@ -196,11 +195,11 @@
 {/snippet}
 
 <div class="mx-auto max-w-screen-2xl px-4 pt-[max(1.25rem,env(safe-area-inset-top))] pb-8 lg:px-10 lg:pt-10">
-	<header class="relative z-30 mb-6 flex flex-col gap-5 text-on-bg xl:flex-row xl:items-end xl:justify-between">
+	<header class="relative z-30 mb-6 flex flex-col gap-5 text-ink xl:flex-row xl:items-end xl:justify-between">
 		<div>
-			<p class="text-on-bg/75">{season.name} · {CURRENT_SEASON}–{(CURRENT_SEASON + 1) % 100}</p>
+			<p class="text-ink/75">{season.name} · {CURRENT_SEASON}–{(CURRENT_SEASON + 1) % 100}</p>
 			<h1 class="mt-1 font-display text-5xl">Teams</h1>
-			<p class="mt-2 max-w-lg text-on-bg/75">Season OPR leaderboards, from the world down to one event.</p>
+			<p class="mt-2 max-w-lg text-ink/75">Season OPR leaderboards, from the world down to one event.</p>
 		</div>
 		<div class="flex flex-col gap-2.5 sm:flex-row sm:items-center">
 			<TeamLookup class="sm:w-80" onpick={show} />
@@ -208,8 +207,7 @@
 				{#if myTeam.current}
 					<button
 						type="button"
-						{@attach glass()}
-						class="glass flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium whitespace-nowrap sm:flex-none"
+						class="chip flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium whitespace-nowrap sm:flex-none"
 						onclick={() => show(myTeam.current!.number)}
 					>
 						<Icon name="pin" class="size-4" /> Find me
@@ -217,8 +215,7 @@
 				{/if}
 				<a
 					href="/compare"
-					{@attach glass()}
-					class="glass flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium whitespace-nowrap sm:flex-none"
+					class="chip flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium whitespace-nowrap sm:flex-none"
 				>
 					<Icon name="swap" class="size-4" /> Compare teams
 				</a>
@@ -292,13 +289,12 @@
 		<LeaderboardTable {rows} {season} {head} highlight={myTeam.current?.number ?? null} mode={scope === 'event' ? 'event' : 'season'} />
 
 		{#if scope !== 'event'}
-			<div class="mt-4 flex flex-col items-center gap-2 text-on-bg">
-				<p class="text-sm text-on-bg/75">{boardRows.length.toLocaleString()} teams loaded</p>
+			<div class="mt-4 flex flex-col items-center gap-2 text-ink">
+				<p class="text-sm text-ink/75">{boardRows.length.toLocaleString()} teams loaded</p>
 				{#if board.hasNextPage}
 					<button
 						type="button"
-						{@attach glass()}
-						class="glass flex h-11 items-center gap-2 rounded-full px-5 text-sm font-medium disabled:opacity-60"
+						class="chip flex h-11 items-center gap-2 rounded-full px-5 text-sm font-medium disabled:opacity-60"
 						disabled={board.isFetchingNextPage}
 						onclick={() => board.fetchNextPage()}
 					>
@@ -307,7 +303,7 @@
 				{/if}
 			</div>
 		{:else if eventRows.length > 0}
-			<p class="mt-4 text-center text-sm text-on-bg/75">
+			<p class="mt-4 text-center text-sm text-ink/75">
 				{eventRows.length} teams · {eventRanked} with results
 			</p>
 		{/if}

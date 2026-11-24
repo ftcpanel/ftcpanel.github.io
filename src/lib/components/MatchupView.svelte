@@ -5,7 +5,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import Chart from '#lib/charts/Chart.svelte';
-	import { glass } from '#lib/glass/layer.ts';
 	import { axisStyle, baseOption, type ChartTheme } from '#lib/charts/theme.ts';
 	import { num, pct } from '#lib/format.ts';
 	import type { MatchupPrediction, StrengthSource } from '#lib/model/matchup.ts';
@@ -137,12 +136,12 @@
 	{@const loser = other(lead)}
 	{@const margin = Math.abs(result.red.total - result.blue.total)}
 	<!-- Actual result on the page background -->
-	<section class="relative text-on-bg" aria-label="Result">
+	<section class="relative text-ink" aria-label="Result">
 		{@render header?.()}
 
 		<div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
 			<div>
-				<p class="text-on-bg/80">
+				<p class="text-ink/80">
 					{#if mySide && decided}
 						{winner === mySide ? 'Your alliance won' : 'Your alliance lost'}
 					{:else}
@@ -154,27 +153,27 @@
 						{decided ? `${sideLabel[lead]} won` : 'Tie'}
 					</span>
 					<p class="font-display text-7xl leading-none whitespace-nowrap sm:text-8xl lg:text-9xl" aria-label="{sideLabel[lead]} {result[lead].total}, {sideLabel[loser]} {result[loser].total}">
-						{result[lead].total}<span class="text-on-bg/50">–</span>{result[loser].total}
+						{result[lead].total}<span class="text-ink/50">–</span>{result[loser].total}
 					</p>
 				</div>
 			</div>
 			<dl class="grid grid-cols-3 gap-2 sm:gap-3">
-				<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-					<dt class="text-xs text-on-bg/75">Margin</dt>
+				<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+					<dt class="text-xs text-ink/75">Margin</dt>
 					<dd class="mt-1 font-display text-xl sm:text-2xl">{decided ? `+${margin}` : '0'}</dd>
 				</div>
-				<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-					<dt class="text-xs text-on-bg/75">No penalties</dt>
+				<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+					<dt class="text-xs text-ink/75">No penalties</dt>
 					<dd class="mt-1 font-display text-xl whitespace-nowrap sm:text-2xl">{result[lead].np}–{result[loser].np}</dd>
 				</div>
 				{#if isQuals}
-					<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-						<dt class="text-xs text-on-bg/75">Ranking pts</dt>
+					<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+						<dt class="text-xs text-ink/75">Ranking pts</dt>
 						<dd class="mt-1 font-display text-xl whitespace-nowrap sm:text-2xl">{rpOf(lead, result[lead])}–{rpOf(loser, result[loser])}</dd>
 					</div>
 				{:else}
-					<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-						<dt class="text-xs text-on-bg/75">Penalties</dt>
+					<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+						<dt class="text-xs text-ink/75">Penalties</dt>
 						<dd class="mt-1 font-display text-xl whitespace-nowrap sm:text-2xl">{result[lead].penaltyByOpp}–{result[loser].penaltyByOpp}</dd>
 					</div>
 				{/if}
@@ -183,32 +182,32 @@
 
 		<!-- Score split, then who played -->
 		<div class="mt-6">
-			<div class="flex h-3.5 gap-1 rounded-full bg-on-bg/25 p-0.5" role="img" aria-label="Red {result.red.total}, Blue {result.blue.total}">
+			<div class="flex h-3.5 gap-1 rounded-full bg-ink/25 p-0.5" role="img" aria-label="Red {result.red.total}, Blue {result.blue.total}">
 				<span class="rounded-full bg-red-al transition-[width] duration-700" style:width="{(result.red.total / Math.max(1, result.red.total + result.blue.total)) * 100}%"></span>
 				<span class="flex-1 rounded-full bg-blue-al"></span>
 			</div>
 			<div class="mt-3 grid gap-2 sm:grid-cols-2 sm:gap-3">
 				{#each sides as side (side)}
 					{@const won = winner === side}
-					<div {@attach glass()} class="glass flex items-center gap-3 rounded-3xl px-4 py-3 {side === 'blue' ? 'sm:flex-row-reverse sm:text-right' : ''}">
-						<span class="size-2.5 shrink-0 rounded-full {dot[side]} ring-2 ring-white/80" aria-hidden="true"></span>
+					<div class="chip flex items-center gap-3 rounded-3xl px-4 py-3 {side === 'blue' ? 'sm:flex-row-reverse sm:text-right' : ''}">
+						<span class="size-2.5 shrink-0 rounded-full {dot[side]}" aria-hidden="true"></span>
 						<ul class="min-w-0 flex-1 space-y-0.5 text-sm" aria-label="{sideLabel[side]} alliance">
 							{#each match[side].teams as t (t.number)}
 								<li class="truncate">
 									<a href="/teams/{t.number}" class="hover:underline {t.noShow || t.dq ? 'line-through opacity-70' : ''}">
 										<span class="font-semibold">{t.number}</span>
-										<span class="text-on-bg/80">{names.get(t.number) ?? ''}</span>
+										<span class="text-ink/80">{names.get(t.number) ?? ''}</span>
 									</a>
 									{#if t.number === perspective}<span class="ml-1 rounded-full bg-accent px-1.5 text-xs font-semibold text-white">You</span>{/if}
-									{#if t.surrogate}<span class="ml-1 text-xs text-on-bg/70">surrogate</span>{/if}
-									{#if t.noShow}<span class="ml-1 text-xs text-on-bg/70">no show</span>{/if}
-									{#if t.dq}<span class="ml-1 text-xs text-on-bg/70">DQ</span>{/if}
+									{#if t.surrogate}<span class="ml-1 text-xs text-ink/70">surrogate</span>{/if}
+									{#if t.noShow}<span class="ml-1 text-xs text-ink/70">no show</span>{/if}
+									{#if t.dq}<span class="ml-1 text-xs text-ink/70">DQ</span>{/if}
 								</li>
 							{/each}
 						</ul>
 						<span class="text-right {side === 'blue' ? 'sm:text-left' : ''}">
 							<span class="block font-display text-3xl leading-none {won || !decided ? '' : 'opacity-60'}">{result[side].total}</span>
-							<span class="text-xs text-on-bg/75">{sideLabel[side]}{won ? ' · won' : ''}</span>
+							<span class="text-xs text-ink/75">{sideLabel[side]}{won ? ' · won' : ''}</span>
 						</span>
 					</div>
 				{/each}
@@ -377,12 +376,12 @@
 	</div>
 {:else}
 	<!-- Headline prediction on the page background -->
-	<section class="relative text-on-bg" aria-label="Prediction">
+	<section class="relative text-ink" aria-label="Prediction">
 		{@render header?.()}
 
 		<div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
 			<div>
-				<p class="text-on-bg/80">
+				<p class="text-ink/80">
 					{#if mySide}
 						{result ? 'Before the match, your alliance had' : 'Your alliance wins'}
 					{:else}
@@ -393,34 +392,34 @@
 					<p class="font-display text-8xl leading-none sm:text-9xl">
 						{Math.round(pFocus * 100)}<span class="text-5xl sm:text-6xl">%</span>
 					</p>
-					<span {@attach glass()} class="glass mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium">
-						<span class="size-2.5 rounded-full {dot[focus]} ring-2 ring-white/80"></span>
+					<span class="chip mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium">
+						<span class="size-2.5 rounded-full {dot[focus]}"></span>
 						{sideLabel[focus]} alliance
 					</span>
 				</div>
 			</div>
 			<dl class="grid grid-cols-3 gap-2 sm:gap-3">
-				<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-					<dt class="text-xs text-on-bg/75">Predicted</dt>
+				<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+					<dt class="text-xs text-ink/75">Predicted</dt>
 					<dd class="mt-1 font-display text-xl whitespace-nowrap sm:text-2xl">{Math.round(p.red.total)}–{Math.round(p.blue.total)}</dd>
 				</div>
-				<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-					<dt class="text-xs text-on-bg/75">Margin</dt>
+				<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+					<dt class="text-xs text-ink/75">Margin</dt>
 					<dd class="mt-1 font-display text-xl sm:text-2xl">±{num(p.marginSd, 0)}</dd>
 				</div>
-				<div {@attach glass()} class="glass rounded-3xl px-3 py-3 sm:px-4">
-					<dt class="text-xs text-on-bg/75">Confidence</dt>
+				<div class="chip rounded-3xl px-3 py-3 sm:px-4">
+					<dt class="text-xs text-ink/75">Confidence</dt>
 					<dd class="mt-1 font-display text-xl capitalize sm:text-2xl">{p.confidence}</dd>
 				</div>
 			</dl>
 		</div>
 
 		<div class="mt-6">
-			<div class="flex h-3.5 gap-1 rounded-full bg-on-bg/25 p-0.5" role="img" aria-label="Red {pct(p.pRed)}, Blue {pct(1 - p.pRed)}">
+			<div class="flex h-3.5 gap-1 rounded-full bg-ink/25 p-0.5" role="img" aria-label="Red {pct(p.pRed)}, Blue {pct(1 - p.pRed)}">
 				<span class="rounded-full bg-red-al transition-[width] duration-700" style:width="{p.pRed * 100}%"></span>
 				<span class="flex-1 rounded-full bg-blue-al"></span>
 			</div>
-			<div class="mt-2 flex justify-between text-sm font-medium text-on-bg/90">
+			<div class="mt-2 flex justify-between text-sm font-medium text-ink/90">
 				<span>Red {pct(p.pRed)}</span>
 				<span>{pct(1 - p.pRed)} Blue</span>
 			</div>

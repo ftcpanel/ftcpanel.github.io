@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 	import Icon from '#lib/components/Icon.svelte';
 	import Segmented from '#lib/components/Segmented.svelte';
-	import { glass } from '#lib/glass/layer.ts';
 	import MatchupView, { type MatchupMode } from '#lib/components/MatchupView.svelte';
 	import { acquireLiveEvent, type LiveEvent } from '#lib/live/liveEvent.svelte.ts';
 	import { fitEventModel, predictMatchup } from '#lib/model/matchup.ts';
@@ -99,12 +98,12 @@
 	{:else if feed}
 		{#snippet header()}
 			<div class="flex items-center gap-3">
-				<a {@attach glass()} href="/events/{season}/{code}" class="glass grid size-11 shrink-0 place-items-center rounded-full" aria-label="Back to event">
+				<a href="/events/{season}/{code}" class="chip grid size-11 shrink-0 place-items-center rounded-full" aria-label="Back to event">
 					<Icon name="back" class="size-5" />
 				</a>
 				<div class="min-w-0">
-					<h1 class="font-display text-3xl leading-tight">Matchup{#if match}<span class="text-on-bg/70"> · {match.label}</span>{/if}</h1>
-					<p class="truncate text-sm text-on-bg/75">{feed?.info?.name ?? code}</p>
+					<h1 class="font-display text-3xl leading-tight">Matchup{#if match}<span class="text-ink/70"> · {match.label}</span>{/if}</h1>
+					<p class="truncate text-sm text-ink/75">{feed?.info?.name ?? code}</p>
 				</div>
 			</div>
 
@@ -121,14 +120,13 @@
 							<button
 								type="button"
 								onclick={() => setTeams(alliances.blue, alliances.red)}
-								{@attach glass()}
-								class="glass mx-auto grid size-10 place-items-center rounded-full"
+								class="chip mx-auto grid size-10 place-items-center rounded-full"
 								aria-label="Swap alliances"
 							>
 								<Icon name="swap" class="size-4" />
 							</button>
 						{/if}
-						<fieldset {@attach glass()} class="glass rounded-[1.75rem] p-1.5">
+						<fieldset class="chip rounded-[1.75rem] p-1.5">
 							<legend class="sr-only">{side === 'red' ? 'Red' : 'Blue'} alliance</legend>
 							<div class="grid grid-cols-2 gap-1.5">
 								{#each alliances[side] as team, slot (slot)}
@@ -155,13 +153,13 @@
 		{/snippet}
 
 		{#if feed.status === 'loading' && !feed.info}
-			<section class="relative h-80 text-on-bg">
+			<section class="relative h-80 text-ink">
 				{@render header()}
 			</section>
 		{:else if !alliances || !prediction || !feed.model.hasData}
-			<section class="relative pb-4 text-on-bg">
+			<section class="relative pb-4 text-ink">
 				{@render header()}
-				<p class="mt-8 max-w-lg text-on-bg/85">
+				<p class="mt-8 max-w-lg text-ink/85">
 					{#if !alliances}
 						Not enough teams registered to build a matchup yet.
 					{:else}
@@ -173,7 +171,7 @@
 		{:else}
 			<MatchupView prediction={prediction} season={info} {names} perspective={mine} {match} bind:mode={() => mode, setMode} {header} />
 		{/if}
-		<p class="mt-6 px-2 text-xs text-on-bg/75">
+		<p class="mt-6 px-2 text-xs text-ink/75">
 			{#if match && !match.played}Updates live as other matches are posted. {/if}Model: per-phase OPR fitted live on this
 			event's matches, blended with each team's earlier-event stats. Backtested on 645 qualification matches: 75% of
 			winners called correctly.
